@@ -1,0 +1,35 @@
+{
+  "name": "@inscripted/backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "migration:create": "NODE_ENV=development mikro-orm migration:create",
+    "migration:up": "NODE_ENV=development mikro-orm migration:up",
+    "migration:down": "NODE_ENV=development mikro-orm migration:down"
+  },
+  "author": "",
+  "license": "ISC",
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts"
+    ]
+  },
+  "dependencies": {
+    "@mikro-orm/core": "^4.5.6",
+    "@mikro-orm/postgresql": "^4.5.6",
+    "@mikro-orm/reflection": "^4.5.6",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@mikro-orm/sqlite": "^4.5.6",
+    "@mikro-orm/cli": "^4.5.6",
+    "@types/faker": "^5.5.6",
+    "@types/got": "^9.6.11",
+    "@types/uuid": "^8.3.0",
+    "faker": "^5.5.3",
+    "ts-node": "^10.0.0"
+  }
+}
