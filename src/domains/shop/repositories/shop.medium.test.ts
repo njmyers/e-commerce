@@ -45,7 +45,7 @@ describe('shopRepo', () => {
   });
 
   describe('update', () => {
-    test('should update the shop email', async () => {
+    test('should update the shop description', async () => {
       await context.runAndRevert(async () => {
         const input = generate.shop();
         const updates = generate.shop();

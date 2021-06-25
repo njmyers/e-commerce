@@ -1,5 +1,5 @@
 import { context } from '../../../lib/context';
-import { Shop, ShopInput } from '../models';
+import { Shop, ShopInput, Product, ProductInput } from '../models';
 import { ApplicationError, StatusCode, ErrorCode } from '../../../lib/error';
 
 async function findById(id: number): Promise<Shop | null> {
