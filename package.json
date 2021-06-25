@@ -21,10 +21,10 @@
     "@mikro-orm/core": "^4.5.6",
     "@mikro-orm/postgresql": "^4.5.6",
     "@mikro-orm/reflection": "^4.5.6",
+    "stripe": "^8.157.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@mikro-orm/sqlite": "^4.5.6",
     "@mikro-orm/cli": "^4.5.6",
     "@types/faker": "^5.5.6",
     "@types/got": "^9.6.11",
