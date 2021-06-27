@@ -1,17 +1,17 @@
 import { shopRepo } from './shop';
 import { productRepo } from './product';
-import { context } from '../../../lib/context';
+import { orm } from '../../../lib/context';
 import { generate } from '../../../../test/data';
 import { Product, ProductFields } from '../models';
 
 describe('productRepo', () => {
   afterAll(async () => {
-    await context.close();
+    await orm.close();
   });
 
   describe('create', () => {
     test('should create a product', async () => {
-      await context.runAndRevert(async () => {
+      await orm.runAndRevert(async () => {
         const input = generate.product();
         const { product } = await setupTest(input);
         expect(product).toMatchObject(input);
@@ -21,7 +21,7 @@ describe('productRepo', () => {
 
   describe('findById', () => {
     test('should find a product by id', async () => {
-      await context.runAndRevert(async () => {
+      await orm.runAndRevert(async () => {
         const input = generate.product();
         const { product } = await setupTest(input);
 
@@ -33,7 +33,7 @@ describe('productRepo', () => {
 
   describe('findByName', () => {
     test('should find a product by name', async () => {
-      await context.runAndRevert(async () => {
+      await orm.runAndRevert(async () => {
         const input = generate.product();
         const { product } = await setupTest(input);
 
@@ -45,7 +45,7 @@ describe('productRepo', () => {
 
   describe('update', () => {
     test('should update the product description', async () => {
-      await context.runAndRevert(async () => {
+      await orm.runAndRevert(async () => {
         const input = generate.product();
         const { product } = await setupTest(input);
 

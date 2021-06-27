@@ -1,6 +1,8 @@
-import { PrimaryKey, Entity, Property, ManyToOne } from '@mikro-orm/core';
+import { Entity, Property, ManyToOne } from '@mikro-orm/core';
+import { ObjectType, Field } from 'type-graphql';
+
 import { MutableEntity } from '../../../lib/entity';
-import { Shop } from './Shop';
+import { Shop } from './shop';
 
 export interface ProductFields {
   name: string;
@@ -8,33 +10,29 @@ export interface ProductFields {
   price: number;
 }
 
-export interface ProductInput extends ProductFields {
-  shop: Shop;
-}
-
 @Entity()
+@ObjectType()
 export class Product extends MutableEntity {
-  @PrimaryKey()
-  id!: number;
-
   @Property()
+  @Field()
   name: string;
 
   @Property()
+  @Field()
   description: string;
 
   @Property()
+  @Field()
   price: number;
 
   @ManyToOne()
   shop!: Shop;
 
-  constructor(input: ProductInput) {
+  constructor(input: ProductFields) {
     super();
+
     this.name = input.name;
     this.description = input.description;
     this.price = input.price;
-
-    this.shop = input.shop;
   }
 }

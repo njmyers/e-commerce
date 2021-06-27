@@ -1,22 +1,27 @@
-import { context } from '../../../lib/context';
-import { Product, ProductInput } from '../models';
+import { orm } from '../../../lib/context';
+import { Product, ProductFields, Shop } from '../models';
 import { ApplicationError, StatusCode, ErrorCode } from '../../../lib/error';
 
+interface ProductInput extends ProductFields {
+  shop: Shop;
+}
+
 async function findById(id: number): Promise<Product | null> {
-  return await context.em.findOne(Product, { id });
+  return await orm.em.findOne(Product, { id });
 }
 
 async function findByName(name: string): Promise<Product | null> {
-  return await context.em.findOne(Product, {
+  return await orm.em.findOne(Product, {
     name,
   });
 }
 
 async function create(input: ProductInput): Promise<Product> {
   const product = new Product(input);
+  product.shop = input.shop;
 
-  context.em.persist(product);
-  await context.em.flush();
+  orm.em.persist(product);
+  await orm.em.flush();
 
   return product;
 }
@@ -25,7 +30,7 @@ async function update(
   id: number,
   input: Partial<ProductInput>
 ): Promise<Product> {
-  const product = await context.em.findOne(Product, id);
+  const product = await orm.em.findOne(Product, id);
 
   if (!product) {
     throw new ApplicationError('Cannot find product with id', {
@@ -43,7 +48,7 @@ async function update(
     }
   });
 
-  await context.em.flush();
+  await orm.em.flush();
 
   return product;
 }
