@@ -6,14 +6,14 @@ const backendSmall = {
   ...baseConfig,
   displayName: `${pkg.name}/small`,
   rootDir: '../../',
-  testMatch: ['<rootDir>/packages/backend/**/*.small.test.ts'],
+  testMatch: ['<rootDir>/packages/backend/**/*.small.ts'],
 };
 
 const backendMedium = {
   ...baseConfig,
   displayName: `${pkg.name}/medium`,
   rootDir: '../../',
-  testMatch: ['<rootDir>/packages/backend/**/*.medium.test.ts'],
+  testMatch: ['<rootDir>/packages/backend/**/*.medium.ts'],
 };
 
 module.exports = {
