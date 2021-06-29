@@ -15,14 +15,14 @@ describe('shopRepo', () => {
       });
     });
 
-    test('should create an admin record', async () => {
+    test('should create an merchant record', async () => {
       await orm.runAndRevert(async () => {
-        const { shop, adminInput } = await setupTest();
+        const { shop, merchantInput } = await setupTest();
 
-        expect(shop.admins).toHaveLength(1);
-        expect(shop.admins.getItems()[0].user).toMatchObject({
-          name: adminInput.name,
-          email: adminInput.email,
+        expect(shop.merchants).toHaveLength(1);
+        expect(shop.merchants.getItems()[0]).toMatchObject({
+          name: merchantInput.name,
+          email: merchantInput.email,
         });
       });
     });
@@ -32,7 +32,7 @@ describe('shopRepo', () => {
         const { shop, customerInput } = await setupTest();
 
         expect(shop.customers).toHaveLength(1);
-        expect(shop.customers.getItems()[0].user).toMatchObject({
+        expect(shop.customers.getItems()[0]).toMatchObject({
           name: customerInput.name,
           email: customerInput.email,
         });
@@ -74,19 +74,19 @@ describe('shopRepo', () => {
       });
     });
 
-    test('should add an admin record', async () => {
+    test('should add an merchant record', async () => {
       await orm.runAndRevert(async () => {
         const { shop } = await setupTest();
-        const adminUpdates = generate.user();
+        const merchantUpdates = generate.user();
 
         const updatedShop = await shopRepo.update(shop.id, {
-          admins: [adminUpdates],
+          merchants: [merchantUpdates],
         });
 
-        expect(updatedShop.admins).toHaveLength(2);
-        expect(updatedShop.admins.getItems()[1].user).toMatchObject({
-          name: adminUpdates.name,
-          email: adminUpdates.email,
+        expect(updatedShop.merchants).toHaveLength(2);
+        expect(updatedShop.merchants.getItems()[1]).toMatchObject({
+          name: merchantUpdates.name,
+          email: merchantUpdates.email,
         });
       });
     });
@@ -101,7 +101,7 @@ describe('shopRepo', () => {
         });
 
         expect(updatedShop.customers).toHaveLength(2);
-        expect(updatedShop.customers.getItems()[1].user).toMatchObject({
+        expect(updatedShop.customers.getItems()[1]).toMatchObject({
           name: customerUpdates.name,
           email: customerUpdates.email,
         });
@@ -170,12 +170,12 @@ async function setupTest() {
   const shopInput = generate.shop();
   const productInput1 = generate.product();
   const productInput2 = generate.product();
-  const adminInput = generate.user();
+  const merchantInput = generate.user();
   const customerInput = generate.user();
 
   const shop = await shopRepo.create({
     ...shopInput,
-    admins: [adminInput],
+    merchants: [merchantInput],
     customers: [customerInput],
     products: [productInput1, productInput2],
   });
@@ -185,7 +185,7 @@ async function setupTest() {
     shopInput,
     productInput1,
     productInput2,
-    adminInput,
+    merchantInput,
     customerInput,
   };
 }

@@ -4,19 +4,22 @@ import {
   ShopFields,
   Product,
   ProductFields,
-  User,
-  UserFields,
-  ShopCustomer,
-  ShopAdmin,
+  Customer,
+  CustomerFields,
+  Merchant,
+  MerchantFields,
+  PasswordField,
 } from '../models';
 import { ApplicationError, StatusCode, ErrorCode } from '../../../lib/error';
 import { userRepo } from './user';
+import { Role } from '../lib';
 
-export type ProductInput = Product | ProductFields;
-export type UserInput = User | UserFields;
+type ProductInput = Product | ProductFields;
+type CustomerInput = Customer | (CustomerFields & PasswordField);
+type MerchantInput = Merchant | (MerchantFields & PasswordField);
 export interface ShopInput extends ShopFields {
-  admins?: UserInput[];
-  customers?: UserInput[];
+  merchants?: MerchantInput[];
+  customers?: CustomerInput[];
   products?: ProductInput[];
 }
 
@@ -82,10 +85,10 @@ async function update(id: number, input: Partial<ShopInput>): Promise<Shop> {
 }
 
 async function addRelationsToShop(shop: Shop, input: Partial<ShopInput>) {
-  if (Array.isArray(input.admins)) {
+  if (Array.isArray(input.merchants)) {
     await Promise.all(
-      input.admins.map(async admin => {
-        await upsertAdminToShop(shop, admin);
+      input.merchants.map(async admin => {
+        await upsertMerchantToShop(shop, admin);
       })
     );
   }
@@ -110,25 +113,22 @@ function addProductToShop(shop: Shop, input: ProductInput) {
   shop.products.add(product);
 }
 
-async function upsertAdminToShop(shop: Shop, input: UserInput) {
-  const user = input instanceof User ? input : await userRepo.create(input);
-  shop.admins.add(
-    new ShopAdmin({
-      shop,
-      user,
-    })
-  );
+async function upsertMerchantToShop(shop: Shop, input: MerchantInput) {
+  const merchant =
+    input instanceof Merchant
+      ? input
+      : await userRepo.create(Role.Merchant, input);
+
+  shop.merchants.add(merchant);
 }
 
-async function upsertCustomerToShop(shop: Shop, input: UserInput) {
-  const user = input instanceof User ? input : await userRepo.create(input);
+async function upsertCustomerToShop(shop: Shop, input: CustomerInput) {
+  const customer =
+    input instanceof Customer
+      ? input
+      : await userRepo.create(Role.Customer, input);
 
-  shop.customers.add(
-    new ShopCustomer({
-      shop,
-      user,
-    })
-  );
+  shop.customers.add(customer);
 }
 
 export const shopRepo = {

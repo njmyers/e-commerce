@@ -4,12 +4,12 @@ import {
   Property,
   Collection,
   OneToMany,
+  ManyToMany,
 } from '@mikro-orm/core';
 import { ObjectType, Field } from 'type-graphql';
 
-import { ShopCustomer } from './shop-customer';
-import { ShopAdmin } from './shop-admin';
 import { Product } from './product';
+import { Customer, Merchant } from './user';
 
 export interface ShopFields {
   name: string;
@@ -30,13 +30,11 @@ export class Shop {
   @Field()
   description: string;
 
-  @OneToMany(() => ShopAdmin, admin => admin.shop)
-  @Field(() => [ShopAdmin])
-  admins = new Collection<ShopAdmin>(this);
+  @ManyToMany(() => Customer)
+  customers = new Collection<Customer>(this);
 
-  @OneToMany(() => ShopCustomer, customer => customer.shop)
-  @Field(() => [ShopCustomer])
-  customers = new Collection<ShopCustomer>(this);
+  @ManyToMany(() => Merchant)
+  merchants = new Collection<Merchant>(this);
 
   @OneToMany(() => Product, product => product.shop)
   @Field(() => [Product])
