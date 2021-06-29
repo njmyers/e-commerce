@@ -9,7 +9,7 @@ export class ImmutableEntity {
   createdAt = new Date();
 
   @BeforeUpdate()
-  preventUpdate(): void {
+  never(): void {
     throw new ApplicationError('Immutable entities cannot be updated', {
       code: ErrorCode.ERROR_FORBIDDEN,
       status: StatusCode.Forbidden,
