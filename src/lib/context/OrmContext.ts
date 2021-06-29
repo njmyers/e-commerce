@@ -54,13 +54,13 @@ export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
    *
    * @param fn - The function to run in a context
    */
-  async run(fn: TransactionCallback): Promise<void> {
+  async run<T extends TransactionCallback>(fn: T): Promise<ReturnType<T>> {
     const orm = await this.orm;
     const em = orm.em.fork(true);
     const id = uuid();
 
     // @ts-expect-error Fix me please
-    await this.storage.run({ em, id }, async () => {
+    return await this.storage.run({ em, id }, async () => {
       await em.begin();
 
       try {
