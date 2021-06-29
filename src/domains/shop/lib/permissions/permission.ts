@@ -1,8 +1,7 @@
 export enum Role {
-  SuperAdmin = 'super_admin',
-  ShopAdmin = 'shop_admin',
-  ShopCustomer = 'shop_customer',
-  Unauthorized = 'unauthorized',
+  Admin = 'admin',
+  Merchant = 'merchant',
+  Customer = 'customer',
 }
 
 export enum Permission {

@@ -1,5 +1,5 @@
 import { password } from './password';
-import { generate } from '../../../../test/data';
+import { generate } from '../../../../../test/data';
 
 describe('password', () => {
   describe('hash', () => {

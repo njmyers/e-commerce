@@ -1,7 +1,7 @@
 import { Role, Permission, Scope, RulesByRole } from './permission';
 
 export const defaultConfig: RulesByRole = {
-  [Role.SuperAdmin]: [
+  [Role.Admin]: [
     {
       permission: Permission.CreateAdmin,
       scope: Scope.Application,
@@ -87,7 +87,7 @@ export const defaultConfig: RulesByRole = {
       scope: Scope.Shop,
     },
   ],
-  [Role.ShopAdmin]: [
+  [Role.Merchant]: [
     {
       permission: Permission.CreateAdmin,
       scope: Scope.Shop,
@@ -156,7 +156,7 @@ export const defaultConfig: RulesByRole = {
       scope: Scope.Shop,
     },
   ],
-  [Role.ShopCustomer]: [
+  [Role.Customer]: [
     {
       permission: Permission.ReadOrder,
       scope: Scope.User,
@@ -164,20 +164,6 @@ export const defaultConfig: RulesByRole = {
     {
       permission: Permission.ReadCustomer,
       scope: Scope.User,
-    },
-    {
-      permission: Permission.ReadProduct,
-      scope: Scope.Shop,
-    },
-    {
-      permission: Permission.Checkout,
-      scope: Scope.Shop,
-    },
-  ],
-  [Role.Unauthorized]: [
-    {
-      permission: Permission.CreateCustomer,
-      scope: Scope.Shop,
     },
     {
       permission: Permission.ReadProduct,

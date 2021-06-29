@@ -3,19 +3,19 @@ import { checkPermissions } from './check-permissions';
 import { Permission, Scope, Role } from './permission';
 
 const config = {
-  [Role.SuperAdmin]: [
+  [Role.Admin]: [
     {
       scope: Scope.Application,
       permission: Permission.CreateProduct,
     },
   ],
-  [Role.ShopAdmin]: [
+  [Role.Merchant]: [
     {
       scope: Scope.Shop,
       permission: Permission.CreateProduct,
     },
   ],
-  [Role.ShopCustomer]: [
+  [Role.Customer]: [
     {
       scope: Scope.User,
       permission: Permission.CreateProduct,
@@ -34,7 +34,8 @@ describe('checkPermissions', () => {
     [
       'the role has no permissions defined',
       {
-        role: Role.Unauthorized,
+        // @ts-expect-error this is not a valid TS enum
+        role: 'no-role',
         permission: Permission.CreateProduct,
       },
       false,
@@ -42,7 +43,7 @@ describe('checkPermissions', () => {
     [
       'the role does not have the specific permission',
       {
-        role: Role.SuperAdmin,
+        role: Role.Admin,
         permission: Permission.DeleteAdmin,
       },
       false,
@@ -50,7 +51,7 @@ describe('checkPermissions', () => {
     [
       'the role has application scope',
       {
-        role: Role.SuperAdmin,
+        role: Role.Admin,
         permission: Permission.CreateProduct,
       },
       true,
@@ -58,7 +59,7 @@ describe('checkPermissions', () => {
     [
       'the role has user scope and the wrong requester',
       {
-        role: Role.ShopCustomer,
+        role: Role.Customer,
         permission: Permission.CreateProduct,
         user: {
           requester: { id: 1 } as User,
@@ -70,7 +71,7 @@ describe('checkPermissions', () => {
     [
       'the role has user scope and the right requester',
       {
-        role: Role.ShopCustomer,
+        role: Role.Customer,
         permission: Permission.CreateProduct,
         user: {
           requester: { id: 1 } as User,
@@ -82,7 +83,7 @@ describe('checkPermissions', () => {
     [
       'the role has shop scope and the wrong requester',
       {
-        role: Role.ShopAdmin,
+        role: Role.Merchant,
         permission: Permission.CreateProduct,
         shop: {
           requester: { id: 1 } as Shop,
@@ -94,7 +95,7 @@ describe('checkPermissions', () => {
     [
       'the role has shop scope and the right requester',
       {
-        role: Role.ShopAdmin,
+        role: Role.Merchant,
         permission: Permission.CreateProduct,
         shop: {
           requester: { id: 1 } as Shop,
