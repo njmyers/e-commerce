@@ -31,9 +31,11 @@ export class Shop {
   description: string;
 
   @ManyToMany(() => Customer)
+  @Field(() => Customer)
   customers = new Collection<Customer>(this);
 
   @ManyToMany(() => Merchant)
+  @Field(() => Merchant)
   merchants = new Collection<Merchant>(this);
 
   @OneToMany(() => Product, product => product.shop)

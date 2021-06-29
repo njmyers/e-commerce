@@ -34,7 +34,7 @@ describe('checkPermissions', () => {
     [
       'the role has no permissions defined',
       {
-        // @ts-expect-error this is not a valid TS enum
+        // @ts-expect-error this case is not allowed by typescript
         role: 'no-role',
         permission: Permission.CreateProduct,
       },
@@ -107,7 +107,6 @@ describe('checkPermissions', () => {
   ];
 
   test.each(cases)('when %s', (_, args, result) => {
-    // @ts-expect-error testing cases not allowed by typescript
     expect(checkPermissions({ ...args, config })).toBe(result);
   });
 });
