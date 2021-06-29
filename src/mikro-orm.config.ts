@@ -6,8 +6,14 @@ import config from '@inscripted/config';
 import { Options } from '@mikro-orm/core';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 
-import { Shop, Product } from './domains/shop/models';
-import { Customer, Order, LineItem } from './domains/billing/models';
+import {
+  Shop,
+  Product,
+  User,
+  Admin,
+  Merchant,
+  Customer,
+} from './domains/shop/models';
 
 const mikroOrmConfig: Options = {
   metadataProvider: TsMorphMetadataProvider,
@@ -17,7 +23,7 @@ const mikroOrmConfig: Options = {
   port: config.get('db.port') as number,
   user: config.get('db.username') as string,
   password: config.get('db.password') as string,
-  entities: [Shop, Product, Customer, Order, LineItem],
+  entities: [Shop, Product, User, Admin, Merchant, Customer],
   migrations: {
     tableName: 'mikro_orm_migrations',
     path: path.resolve(__dirname, '../migrations'),
