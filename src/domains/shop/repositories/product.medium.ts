@@ -11,9 +11,11 @@ describe('productRepo', () => {
 
   describe('create', () => {
     test('should create a product', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const input = generate.product();
         const { product } = await setupTest(input);
+        await em.flush();
+
         expect(product).toMatchObject(input);
       });
     });
@@ -21,9 +23,10 @@ describe('productRepo', () => {
 
   describe('findById', () => {
     test('should find a product by id', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const input = generate.product();
         const { product } = await setupTest(input);
+        await em.flush();
 
         const found = await productRepo.findById(product.id);
         expect(found).toMatchObject(product);
@@ -33,9 +36,10 @@ describe('productRepo', () => {
 
   describe('findByName', () => {
     test('should find a product by name', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const input = generate.product();
         const { product } = await setupTest(input);
+        await em.flush();
 
         const found = await productRepo.findByName(product.name);
         expect(found).toMatchObject(product);
@@ -45,14 +49,17 @@ describe('productRepo', () => {
 
   describe('update', () => {
     test('should update the product description', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const input = generate.product();
         const { product } = await setupTest(input);
+        await em.flush();
 
         const updates = generate.product();
         const updated = await productRepo.update(product.id, {
           description: updates.description,
         });
+
+        await em.flush();
 
         expect(updated).toMatchObject({
           name: input.name,
@@ -69,7 +76,7 @@ interface SetupTestReturn {
 
 async function setupTest(input: ProductFields): Promise<SetupTestReturn> {
   const shop = await shopRepo.create(generate.shop());
-  const product = await productRepo.create({
+  const product = productRepo.create({
     ...input,
     shop,
   });

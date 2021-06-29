@@ -41,8 +41,6 @@ async function create<T extends Role>(
   }
 
   orm.em.persist(user);
-  await orm.em.flush();
-
   return user;
 }
 
@@ -111,8 +109,6 @@ async function update<T extends Role>({
       user[field] = value;
     }
   });
-
-  await orm.em.flush();
 
   return user;
 }

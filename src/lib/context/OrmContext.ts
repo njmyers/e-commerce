@@ -13,7 +13,7 @@ interface Store<D extends IDatabaseDriver = IDatabaseDriver> {
 }
 
 export interface TransactionCallback {
-  (): Promise<unknown>;
+  (em: EntityManager): Promise<unknown>;
 }
 
 export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
@@ -64,7 +64,7 @@ export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
       await em.begin();
 
       try {
-        const result = await fn();
+        const result = await fn(em);
         await em.commit();
 
         return result;
@@ -90,7 +90,7 @@ export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
       await em.begin();
 
       try {
-        const result = await fn();
+        const result = await fn(em);
         await em.rollback();
 
         return result;

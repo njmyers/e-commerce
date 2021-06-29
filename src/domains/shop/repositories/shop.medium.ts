@@ -9,15 +9,18 @@ describe('shopRepo', () => {
 
   describe('create', () => {
     test('should create a shop record', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop, shopInput } = await setupTest();
+        await em.flush();
+
         expect(shop).toMatchObject(shopInput);
       });
     });
 
     test('should create an merchant record', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop, merchantInput } = await setupTest();
+        await em.flush();
 
         expect(shop.merchants).toHaveLength(1);
         expect(shop.merchants.getItems()[0]).toMatchObject({
@@ -28,8 +31,9 @@ describe('shopRepo', () => {
     });
 
     test('should create a customer record', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop, customerInput } = await setupTest();
+        await em.flush();
 
         expect(shop.customers).toHaveLength(1);
         expect(shop.customers.getItems()[0]).toMatchObject({
@@ -40,8 +44,9 @@ describe('shopRepo', () => {
     });
 
     test('should create product records', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop, productInput1, productInput2 } = await setupTest();
+        await em.flush();
 
         const products = shop.products.toJSON();
         expect(products).toHaveLength(2);
@@ -64,8 +69,9 @@ describe('shopRepo', () => {
 
   describe('update', () => {
     test('should update shop fields', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop } = await setupTest();
+        await em.flush();
 
         const shopUpdateInput = generate.shop();
         const updatedShop = await shopRepo.update(shop.id, shopUpdateInput);
@@ -75,13 +81,16 @@ describe('shopRepo', () => {
     });
 
     test('should add an merchant record', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop } = await setupTest();
         const merchantUpdates = generate.user();
+        await em.flush();
 
         const updatedShop = await shopRepo.update(shop.id, {
           merchants: [merchantUpdates],
         });
+
+        await em.flush();
 
         expect(updatedShop.merchants).toHaveLength(2);
         expect(updatedShop.merchants.getItems()[1]).toMatchObject({
@@ -92,13 +101,16 @@ describe('shopRepo', () => {
     });
 
     test('should add a customer record', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop } = await setupTest();
-        const customerUpdates = generate.user();
+        await em.flush();
 
+        const customerUpdates = generate.user();
         const updatedShop = await shopRepo.update(shop.id, {
           customers: [customerUpdates],
         });
+
+        await em.flush();
 
         expect(updatedShop.customers).toHaveLength(2);
         expect(updatedShop.customers.getItems()[1]).toMatchObject({
@@ -133,10 +145,11 @@ describe('shopRepo', () => {
 
   describe('findById', () => {
     test('should find a shop by id', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop } = await setupTest();
-        const found = await shopRepo.findById(shop.id);
+        await em.flush();
 
+        const found = await shopRepo.findById(shop.id);
         expect(found).toMatchObject(shop);
       });
     });
@@ -144,10 +157,11 @@ describe('shopRepo', () => {
 
   describe('findByName', () => {
     test('should find a shop by name', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop } = await setupTest();
-        const found = await shopRepo.findByName(shop.name);
+        await em.flush();
 
+        const found = await shopRepo.findByName(shop.name);
         expect(found).toMatchObject(shop);
       });
     });
@@ -155,8 +169,10 @@ describe('shopRepo', () => {
 
   describe('findProductById', () => {
     test('should find a shop by id', async () => {
-      await orm.runAndRevert(async () => {
+      await orm.runAndRevert(async em => {
         const { shop } = await setupTest();
+        await em.flush();
+
         const [product] = shop.products.getItems();
         const found = await shopRepo.findProductById(product.id);
 

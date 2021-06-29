@@ -23,6 +23,10 @@ export interface ShopInput extends ShopFields {
   products?: ProductInput[];
 }
 
+async function findAll(): Promise<Shop[]> {
+  return await orm.em.find(Shop, {});
+}
+
 async function findById(id: number): Promise<Shop | null> {
   return await orm.em.findOne(Shop, { id });
 }
@@ -50,7 +54,6 @@ async function create(input: ShopInput): Promise<Shop> {
   await addRelationsToShop(shop, input);
 
   orm.em.persist(shop);
-  await orm.em.flush();
   return shop;
 }
 
@@ -80,7 +83,6 @@ async function update(id: number, input: Partial<ShopInput>): Promise<Shop> {
 
   await addRelationsToShop(shop, input);
 
-  await orm.em.flush();
   return shop;
 }
 
@@ -134,6 +136,7 @@ async function upsertCustomerToShop(shop: Shop, input: CustomerInput) {
 export const shopRepo = {
   findById,
   findByName,
+  findAll,
   findProductById,
   findProductByName,
   create,

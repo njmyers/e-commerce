@@ -16,12 +16,11 @@ async function findByName(name: string): Promise<Product | null> {
   });
 }
 
-async function create(input: ProductInput): Promise<Product> {
+function create(input: ProductInput): Product {
   const product = new Product(input);
   product.shop = input.shop;
 
   orm.em.persist(product);
-  await orm.em.flush();
 
   return product;
 }
@@ -47,8 +46,6 @@ async function update(
       product[field] = value;
     }
   });
-
-  await orm.em.flush();
 
   return product;
 }

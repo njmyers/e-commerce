@@ -14,9 +14,10 @@ describe('userRepo', () => {
     role => {
       describe('create', () => {
         test('should create a user', async () => {
-          await orm.runAndRevert(async () => {
+          await orm.runAndRevert(async em => {
             const input = generate.user();
             const user = await userRepo.create(role, input);
+            await em.flush();
 
             // @ts-expect-error this test will fail if it is undefined
             const match = await password.check(input.password, user.password);
@@ -32,9 +33,10 @@ describe('userRepo', () => {
 
       describe('findById', () => {
         test('should find a user by id', async () => {
-          await orm.runAndRevert(async () => {
+          await orm.runAndRevert(async em => {
             const input = generate.user();
             const user = await userRepo.create(role, input);
+            await em.flush();
 
             const found = await userRepo.findById({
               id: user.id,
@@ -48,9 +50,11 @@ describe('userRepo', () => {
 
       describe('findByEmail', () => {
         test('should find a user by email', async () => {
-          await orm.runAndRevert(async () => {
+          await orm.runAndRevert(async em => {
             const input = generate.user();
             const user = await userRepo.create(role, input);
+            await em.flush();
+
             const found = await userRepo.findByEmail({
               email: user.email,
               role,
@@ -63,11 +67,12 @@ describe('userRepo', () => {
 
       describe('update', () => {
         test('should update the user email', async () => {
-          await orm.runAndRevert(async () => {
+          await orm.runAndRevert(async em => {
             const input = generate.user();
-            const updates = generate.user();
-
             const user = await userRepo.create(role, input);
+            await em.flush();
+
+            const updates = generate.user();
             const updated = await userRepo.update({
               id: user.id,
               role,
