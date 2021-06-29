@@ -1,5 +1,4 @@
 import { PrimaryKey, Property, DateType } from '@mikro-orm/core';
-
 export class MutableEntity {
   @PrimaryKey()
   id!: number;
