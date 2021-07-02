@@ -1,5 +1,4 @@
 import {
-  PrimaryKey,
   Entity,
   Property,
   Collection,
@@ -8,6 +7,7 @@ import {
 } from '@mikro-orm/core';
 import { ObjectType, Field } from 'type-graphql';
 
+import { MutableEntity } from '../../../lib/entity';
 import { Product } from './product';
 import { Customer, Merchant } from './user';
 
@@ -18,10 +18,7 @@ export interface ShopFields {
 
 @Entity()
 @ObjectType()
-export class Shop {
-  @PrimaryKey()
-  id!: number;
-
+export class Shop extends MutableEntity {
   @Property()
   @Field()
   name: string;
@@ -43,6 +40,7 @@ export class Shop {
   products = new Collection<Product>(this);
 
   constructor(input: ShopFields) {
+    super();
     this.name = input.name;
     this.description = input.description;
   }

@@ -22,6 +22,7 @@ export interface PasswordField {
 }
 
 @Entity({ discriminatorColumn: 'role', discriminatorMap })
+@ObjectType()
 export class User extends MutableEntity {
   @Property()
   @Unique()
