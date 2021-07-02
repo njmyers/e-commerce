@@ -13,7 +13,7 @@ interface Store<D extends IDatabaseDriver = IDatabaseDriver> {
 }
 
 export interface TransactionCallback {
-  (em: EntityManager): Promise<unknown>;
+  (em: EntityManager): unknown | Promise<unknown>;
 }
 
 export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
