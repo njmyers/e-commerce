@@ -1,3 +1,4 @@
+import { Populate } from '@mikro-orm/core';
 import { orm } from '../../../lib/context';
 import { Product, ProductFields, Shop } from '../models';
 import { ApplicationError, StatusCode, ErrorCode } from '../../../lib/error';
@@ -6,14 +7,18 @@ interface ProductInput extends ProductFields {
   shop: Shop;
 }
 
-async function findById(id: number): Promise<Product | null> {
-  return await orm.em.findOne(Product, { id });
+async function findById(
+  id: number,
+  populate?: Populate<Product>
+): Promise<Product | null> {
+  return await orm.em.findOne(Product, { id }, populate);
 }
 
-async function findByName(name: string): Promise<Product | null> {
-  return await orm.em.findOne(Product, {
-    name,
-  });
+async function findByName(
+  name: string,
+  populate?: Populate<Product>
+): Promise<Product | null> {
+  return await orm.em.findOne(Product, { name }, populate);
 }
 
 function create(input: ProductInput): Product {

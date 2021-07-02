@@ -1,3 +1,4 @@
+import { Populate } from '@mikro-orm/core';
 import { orm } from '../../../lib/context';
 import {
   Shop,
@@ -23,30 +24,36 @@ export interface ShopInput extends ShopFields {
   products?: ProductInput[];
 }
 
-async function findAll(): Promise<Shop[]> {
-  return await orm.em.find(Shop, {});
+async function findAll(populate?: Populate<Shop>): Promise<Shop[]> {
+  return await orm.em.find(Shop, {}, populate);
 }
 
-async function findById(id: number): Promise<Shop | null> {
-  return await orm.em.findOne(Shop, { id });
+async function findById(
+  id: number,
+  populate?: Populate<Shop>
+): Promise<Shop | null> {
+  return await orm.em.findOne(Shop, { id }, populate);
 }
 
-async function findByName(name: string): Promise<Shop | null> {
-  return await orm.em.findOne(Shop, {
-    name,
-  });
+async function findByName(
+  name: string,
+  populate?: Populate<Shop>
+): Promise<Shop | null> {
+  return await orm.em.findOne(Shop, { name }, populate);
 }
 
-async function findProductById(id: number): Promise<Product | null> {
-  return await orm.em.findOne(Product, {
-    id,
-  });
+async function findProductById(
+  id: number,
+  populate?: Populate<Product>
+): Promise<Product | null> {
+  return await orm.em.findOne(Product, { id }, populate);
 }
 
-async function findProductByName(name: string): Promise<Product | null> {
-  return await orm.em.findOne(Product, {
-    name,
-  });
+async function findProductByName(
+  name: string,
+  populate?: Populate<Product>
+): Promise<Product | null> {
+  return await orm.em.findOne(Product, { name }, populate);
 }
 
 async function create(input: ShopInput): Promise<Shop> {

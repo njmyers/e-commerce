@@ -1,3 +1,4 @@
+import { Populate } from '@mikro-orm/core';
 import { orm } from '../../../lib/context';
 import {
   PasswordField,
@@ -44,33 +45,36 @@ async function create<T extends Role>(
   return user;
 }
 
-export interface FindByIdArgs {
+export interface FindByIdArgs<T extends Role> {
   id: number;
-  role: Role;
+  role: T;
+  populate?: Populate<UserTypeByRole[T]>;
 }
 
 async function findById<T extends Role>({
   role,
   id,
-}: FindByIdArgs): Promise<UserTypeByRole[T] | null> {
+  populate,
+}: FindByIdArgs<T>): Promise<UserTypeByRole[T] | null> {
   const Constructor = UserConstructorsByRole[role];
-  return await orm.em.findOne(Constructor, { id });
+  // @ts-expect-error TODO: Fix me please
+  return await orm.em.findOne(Constructor, { id }, populate);
 }
 
-export interface FindByEmailArgs {
+export interface FindByEmailArgs<T extends Role> {
   email: string;
-  role: Role;
+  role: T;
+  populate?: Populate<UserTypeByRole[T]>;
 }
 
 async function findByEmail<T extends Role>({
   email,
   role,
-}: FindByEmailArgs): Promise<UserTypeByRole[T] | null> {
+  populate,
+}: FindByEmailArgs<T>): Promise<UserTypeByRole[T] | null> {
   const Constructor = UserConstructorsByRole[role];
-  return await orm.em.findOne(Constructor, {
-    role,
-    email,
-  });
+  // @ts-expect-error TODO: Fix me please
+  return await orm.em.findOne(Constructor, { role, email }, populate);
 }
 
 export interface UpdateArgs<T extends Role> {

@@ -26,6 +26,7 @@ describe('productRepo', () => {
       await orm.runAndRevert(async em => {
         const input = generate.product();
         const { product } = await setupTest(input);
+
         await em.flush();
 
         const found = await productRepo.findById(product.id);
