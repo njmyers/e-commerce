@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import faker from 'faker/locale/en_US';
+import { PasswordField, UserFields } from '../src/domains/shop';
+import fakerLocaleEnUs from 'faker/locale/en_US';
 
-faker.seed(0o7734);
+fakerLocaleEnUs.seed(0o7734);
+export const faker = fakerLocaleEnUs;
 
 function shop() {
   return {
@@ -10,16 +12,17 @@ function shop() {
   };
 }
 
-function customer() {
+function user(user?: Partial<UserFields & PasswordField>) {
   return {
+    ...user,
     email: faker.internet.email(),
     name: faker.name.findName(),
+    password: faker.internet.password(),
   };
 }
 
 function order() {
   return {
-    total: faker.datatype.number({ min: 0, max: 10000 }),
     tax: faker.datatype.number({ min: 0, max: 10000 }),
     notes: faker.random.words(),
     shippedAt: faker.date.future(),
@@ -42,7 +45,7 @@ function product() {
 
 export const generate = {
   shop,
-  customer,
+  user,
   order,
   lineItem,
   product,
