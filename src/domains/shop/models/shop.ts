@@ -8,8 +8,15 @@ import {
 import { ObjectType, Field } from 'type-graphql';
 
 import { MutableEntity } from '../../../lib/entity';
-import { Product } from './product';
-import { Customer, Merchant } from './user';
+import {
+  EdgeFactory,
+  ConnectionFactory,
+  PageInfoFactory,
+} from '../../../lib/graphql/connection';
+
+import { Product, ProductsConnection } from './product';
+import { Customer, CustomerConnection } from './customer';
+import { Merchant, MerchantConnection } from './merchant';
 
 export interface ShopFields {
   name: string;
@@ -28,15 +35,15 @@ export class Shop extends MutableEntity {
   description: string;
 
   @ManyToMany(() => Customer)
-  @Field(() => Customer)
+  @Field(() => CustomerConnection)
   customers = new Collection<Customer>(this);
 
   @ManyToMany(() => Merchant)
-  @Field(() => Merchant)
+  @Field(() => MerchantConnection)
   merchants = new Collection<Merchant>(this);
 
   @OneToMany(() => Product, product => product.shop)
-  @Field(() => [Product])
+  @Field(() => ProductsConnection)
   products = new Collection<Product>(this);
 
   constructor(input: ShopFields) {
@@ -44,4 +51,22 @@ export class Shop extends MutableEntity {
     this.name = input.name;
     this.description = input.description;
   }
+}
+
+@ObjectType()
+export class ShopsEdge extends EdgeFactory(() => Shop) {
+  // Add your own properties
+}
+
+@ObjectType()
+export class ShopsPageInfo extends PageInfoFactory() {
+  // Add your own properties
+}
+
+@ObjectType()
+export class ShopsConnection extends ConnectionFactory(
+  ShopsEdge,
+  ShopsPageInfo
+) {
+  // Add your own properties
 }

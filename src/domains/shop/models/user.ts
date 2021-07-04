@@ -51,33 +51,3 @@ export class User extends MutableEntity {
     this.password = await password.hash(clearText);
   }
 }
-
-export type AdminFields = Omit<UserFields, 'role'>;
-
-@Entity()
-@ObjectType()
-export class Admin extends User {
-  constructor(input: AdminFields) {
-    super({ ...input, role: Role.Admin });
-  }
-}
-
-export type MerchantFields = Omit<UserFields, 'role'>;
-
-@Entity()
-@ObjectType()
-export class Merchant extends User {
-  constructor(input: MerchantFields) {
-    super({ ...input, role: Role.Merchant });
-  }
-}
-
-export type CustomerFields = Omit<UserFields, 'role'>;
-
-@Entity()
-@ObjectType()
-export class Customer extends User {
-  constructor(input: CustomerFields) {
-    super({ ...input, role: Role.Customer });
-  }
-}
