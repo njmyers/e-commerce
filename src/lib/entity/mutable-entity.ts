@@ -1,6 +1,7 @@
 import { PrimaryKey, Property, DateType } from '@mikro-orm/core';
-import { Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID } from 'type-graphql';
 
+@ObjectType()
 export class MutableEntity {
   @PrimaryKey()
   @Field(() => ID)

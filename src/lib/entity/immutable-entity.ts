@@ -1,8 +1,9 @@
 import { PrimaryKey, Property, DateType, BeforeUpdate } from '@mikro-orm/core';
-import { Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID } from 'type-graphql';
 
 import { ApplicationError, ErrorCode, StatusCode } from '../error';
 
+@ObjectType()
 export class ImmutableEntity {
   @PrimaryKey()
   @Field(() => ID)
