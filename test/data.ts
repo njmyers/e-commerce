@@ -14,10 +14,10 @@ function shop() {
 
 function user(user?: Partial<UserFields & PasswordField>) {
   return {
-    ...user,
     email: faker.internet.email(),
     name: faker.name.findName(),
     password: faker.internet.password(),
+    ...user,
   };
 }
 
@@ -40,6 +40,10 @@ function product() {
     name: faker.random.word(),
     description: faker.random.words(),
     price: faker.datatype.number({ min: 1000, max: 10000 }),
+    length: faker.datatype.number({ min: 1000, max: 10000 }),
+    height: faker.datatype.number({ min: 1000, max: 10000 }),
+    width: faker.datatype.number({ min: 1000, max: 10000 }),
+    mass: faker.datatype.number({ min: 1000, max: 10000 }),
   };
 }
 
