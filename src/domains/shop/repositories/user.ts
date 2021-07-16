@@ -1,5 +1,6 @@
 import { Populate } from '@mikro-orm/core';
 import { orm } from '../../../lib/context';
+import { ClassType } from '../../../lib/graphql';
 import {
   PasswordField,
   Admin,
@@ -8,33 +9,39 @@ import {
   CustomerFields,
   Merchant,
   MerchantFields,
+  User,
 } from '../models';
 import { ApplicationError, StatusCode, ErrorCode } from '../../../lib/error';
 import { Role } from '../lib';
 
-export interface UserInputByRole {
+export interface UserByRole {
+  [Role.Admin]: unknown;
+  [Role.Customer]: unknown;
+  [Role.Merchant]: unknown;
+}
+export interface UserInputByRole extends UserByRole {
   [Role.Admin]: AdminFields & PasswordField;
   [Role.Customer]: CustomerFields & PasswordField;
   [Role.Merchant]: MerchantFields & PasswordField;
 }
 
-export interface UserTypeByRole {
+export interface UserTypeByRole extends UserByRole {
   [Role.Admin]: Admin;
   [Role.Customer]: Customer;
   [Role.Merchant]: Merchant;
 }
 
-const UserConstructorsByRole = {
-  [Role.Admin]: Admin,
-  [Role.Customer]: Customer,
-  [Role.Merchant]: Merchant,
-};
+export interface UserConstructorTypesByRole extends UserByRole {
+  [Role.Admin]: ClassType<Admin>;
+  [Role.Customer]: ClassType<Customer>;
+  [Role.Merchant]: ClassType<Merchant>;
+}
 
 async function create<T extends Role>(
   role: T,
   input: UserInputByRole[T]
 ): Promise<UserTypeByRole[T]> {
-  const Constructor = UserConstructorsByRole[role];
+  const Constructor = getConstructor(role);
   const user = new Constructor(input);
 
   if (input.password) {
@@ -42,12 +49,14 @@ async function create<T extends Role>(
   }
 
   orm.em.persist(user);
+
+  // @ts-expect-error TODO: fix me please
   return user;
 }
 
 export interface FindByIdArgs<T extends Role> {
   id: number;
-  role: T;
+  role?: T;
   populate?: Populate<UserTypeByRole[T]>;
 }
 
@@ -56,14 +65,14 @@ async function findById<T extends Role>({
   id,
   populate,
 }: FindByIdArgs<T>): Promise<UserTypeByRole[T] | null> {
-  const Constructor = UserConstructorsByRole[role];
-  // @ts-expect-error TODO: Fix me please
+  const Constructor = role ? getConstructor(role) : User;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return await orm.em.findOne(Constructor, { id }, populate);
 }
 
 export interface FindByEmailArgs<T extends Role> {
   email: string;
-  role: T;
+  role?: T;
   populate?: Populate<UserTypeByRole[T]>;
 }
 
@@ -72,9 +81,17 @@ async function findByEmail<T extends Role>({
   role,
   populate,
 }: FindByEmailArgs<T>): Promise<UserTypeByRole[T] | null> {
-  const Constructor = UserConstructorsByRole[role];
-  // @ts-expect-error TODO: Fix me please
-  return await orm.em.findOne(Constructor, { role, email }, populate);
+  const Constructor = role ? getConstructor(role) : User;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return await orm.em.findOne(Constructor, { email }, populate);
+}
+
+export interface FindAllArgs {
+  populate?: Populate<User>;
+}
+
+async function findAll({ populate }: FindAllArgs = {}): Promise<User[]> {
+  return await orm.em.find(User, {}, populate);
 }
 
 export interface UpdateArgs<T extends Role> {
@@ -88,8 +105,8 @@ async function update<T extends Role>({
   role,
   input,
 }: UpdateArgs<T>): Promise<UserTypeByRole[T]> {
-  const Constructor = UserConstructorsByRole[role];
-  const user = await orm.em.findOne(Constructor, { id });
+  const Constructor = getConstructor(role);
+  const user = (await orm.em.findOne(Constructor, { id })) as UserTypeByRole[T];
 
   if (!user) {
     throw new ApplicationError('Cannot find user with id', {
@@ -117,9 +134,34 @@ async function update<T extends Role>({
   return user;
 }
 
+function getConstructor<T extends Role>(
+  role: Role
+): UserConstructorTypesByRole[T] {
+  switch (role) {
+    case Role.Admin: {
+      // @ts-expect-error TODO: fix me please
+      return Admin;
+    }
+
+    case Role.Customer: {
+      return Customer;
+    }
+
+    case Role.Merchant: {
+      // @ts-expect-error TODO: fix me please
+      return Merchant;
+    }
+
+    default: {
+      throw new Error(`Role is not defined: ${String(role)}`);
+    }
+  }
+}
+
 export const userRepo = {
   findById,
   findByEmail,
+  findAll,
   create,
   update,
 };

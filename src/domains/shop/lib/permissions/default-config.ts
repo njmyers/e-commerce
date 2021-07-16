@@ -37,6 +37,10 @@ export const defaultConfig: RulesByRole = {
     },
 
     {
+      permission: Permission.ReadAllShops,
+      scope: Scope.Application,
+    },
+    {
       permission: Permission.CreateShop,
       scope: Scope.Application,
     },

@@ -5,8 +5,8 @@ import { Permission, Scope, Rule, RulesByRole, Role } from './permission';
 import { defaultConfig } from './default-config';
 
 export interface ResourceScope<T extends { id: number }> {
-  requester: T;
-  owner: T;
+  requester?: T | null;
+  owner?: T | null;
 }
 
 export interface CheckPermissionsArgs {
@@ -42,11 +42,11 @@ export function checkPermissions({
     }
 
     case Scope.User: {
-      return Boolean(user && user.requester.id === user.owner.id);
+      return user?.requester?.id === user?.owner?.id;
     }
 
     case Scope.Shop: {
-      return Boolean(shop && shop.requester.id === shop.owner.id);
+      return shop?.requester?.id === shop?.owner?.id;
     }
 
     default: {

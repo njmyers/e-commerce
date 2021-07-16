@@ -14,6 +14,10 @@ export interface ProductFields {
   name: string;
   description: string;
   price: number;
+  length: number;
+  height: number;
+  width: number;
+  mass: number;
 }
 
 @Entity()
@@ -31,6 +35,22 @@ export class Product extends MutableEntity {
   @Field()
   price: number;
 
+  @Property()
+  @Field()
+  length: number;
+
+  @Property()
+  @Field()
+  height: number;
+
+  @Property()
+  @Field()
+  width: number;
+
+  @Property()
+  @Field()
+  mass: number;
+
   @ManyToOne()
   shop!: Shop;
 
@@ -40,6 +60,10 @@ export class Product extends MutableEntity {
     this.name = input.name;
     this.description = input.description;
     this.price = input.price;
+    this.length = input.length;
+    this.height = input.height;
+    this.width = input.width;
+    this.mass = input.mass;
   }
 }
 

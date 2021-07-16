@@ -20,6 +20,7 @@ export enum Permission {
   /** Shops */
   CreateShop = 'create_shop',
   ReadShop = 'read_shop',
+  ReadAllShops = 'read_all_shops',
   UpdateShop = 'update_shop',
   DeleteShop = 'delete_shop',
 

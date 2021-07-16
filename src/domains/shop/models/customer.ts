@@ -1,5 +1,5 @@
-import { Entity } from '@mikro-orm/core';
-import { ObjectType } from 'type-graphql';
+import { Entity, OneToMany, Collection } from '@mikro-orm/core';
+import { ObjectType, Field } from 'type-graphql';
 
 import { Role } from '../lib';
 import { User, UserFields } from './user';
@@ -8,12 +8,17 @@ import {
   EdgeFactory,
   PageInfoFactory,
 } from '../../../lib/graphql/connection';
+import { Order, OrderConnection } from '../../billing/models/order';
 
 export type CustomerFields = Omit<UserFields, 'role'>;
 
 @Entity()
 @ObjectType()
 export class Customer extends User {
+  @OneToMany(() => Order, order => order.customer)
+  @Field(() => OrderConnection)
+  orders = new Collection<Order>(this);
+
   constructor(input: CustomerFields) {
     super({ ...input, role: Role.Customer });
   }
