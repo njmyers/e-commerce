@@ -1,0 +1,8 @@
+{
+  "db": {
+    "type": "postgresql",
+    "name": "e-commerce",
+    "address": "localhost",
+    "username": "development"
+  }
+}
