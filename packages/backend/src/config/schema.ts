@@ -11,7 +11,7 @@ export const config = convict({
   db: {
     type: {
       doc: 'The database engine in use',
-      format: 'postgresql',
+      format: String,
       env: 'DATABASE_ENGINE',
       default: 'postgresql',
     },

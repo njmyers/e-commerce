@@ -40,20 +40,3 @@ jobs:
       - name: Lint All Packages
         run: yarn lint --format ./node_modules/eslint-junit
 
-      - name: Publish Lint Report
-        if: always()
-        uses: scacap/action-surefire-report@v1
-        with:
-          github_token: ${{ github.token }}
-          report_paths: '**/lint.xml'
-          check_name: 'Lint Report'
-          fail_if_no_tests: false
-
-      - name: Publish Test Report
-        if: always()
-        uses: scacap/action-surefire-report@v1
-        with:
-          github_token: ${{ github.token }}
-          report_paths: '**/junit.xml'
-          check_name: 'Test Report'
-          fail_if_no_tests: false

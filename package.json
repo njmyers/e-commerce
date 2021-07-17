@@ -10,7 +10,8 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint packages"
+    "lint": "eslint packages",
+    "backend": "yarn workspace @njmyers/e-commerce-backend"
   },
   "engines": {
     "node": ">=14"
@@ -40,5 +41,11 @@
     "@types/node": "^16.3.3",
     "@types/shelljs": "^0.8.9",
     "tslib": "^2.3.0"
+  },
+  "resolutions": {
+    "@mikro-orm/core": "4.5.6",
+    "@mikro-orm/migrations": "4.5.6",
+    "@mikro-orm/postgresql": "4.5.6",
+    "@mikro-orm/reflection": "4.5.6"
   }
 }

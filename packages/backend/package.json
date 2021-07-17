@@ -27,10 +27,10 @@
   },
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.19.0",
-    "@mikro-orm/core": "4.5.6",
+    "@mikro-orm/core": "^4.5.7",
     "@mikro-orm/migrations": "^4.5.7",
-    "@mikro-orm/postgresql": "4.5.6",
-    "@mikro-orm/reflection": "4.5.6",
+    "@mikro-orm/postgresql": "^4.5.7",
+    "@mikro-orm/reflection": "^4.5.7",
     "apollo-server-fastify": "^2.25.2",
     "bcrypt": "^5.0.1",
     "chalk": "^4.1.1",
