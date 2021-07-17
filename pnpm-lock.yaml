@@ -5,10 +5,12 @@ importers:
   .:
     specifiers:
       '@njmyers/eslint-config': ^0.0.1
+      eslint-junit: ^1.0.1
       prettier: ^2.3.2
       typescript: ^4.3.5
     dependencies:
       '@njmyers/eslint-config': 0.0.1_prettier@2.3.2+typescript@4.3.5
+      eslint-junit: 1.0.1
       prettier: 2.3.2
       typescript: 4.3.5
 
@@ -1681,6 +1683,11 @@ packages:
     resolution: {integrity: sha1-w7M6te42DYbg5ijwRorn7yfWVN8=}
     engines: {node: '>=0.10.0'}
 
+  /ansi-regex/3.0.0:
+    resolution: {integrity: sha1-7QMXwyIGT3lGbAKWa922Bas32Zg=}
+    engines: {node: '>=4'}
+    dev: false
+
   /ansi-regex/4.1.0:
     resolution: {integrity: sha512-1apePfXM1UOSqw0o9IiFAovVz9M5S1Dg+4TrDwfMewQ6p/rmMueb7tWZjQ1rx4Loy1ArBggoqGpfqqdI4rondg==}
     engines: {node: '>=6'}
@@ -2986,6 +2993,15 @@ packages:
       tsconfig-paths: 3.10.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /eslint-junit/1.0.1:
+    resolution: {integrity: sha1-zKH1sYErpVO9QkhxAIVVwmoA7eo=}
+    engines: {node: '>=6.0.0'}
+    dependencies:
+      mkdirp: 0.5.5
+      strip-ansi: 4.0.0
+      xml: 1.0.1
     dev: false
 
   /eslint-module-utils/2.6.1:
@@ -4821,6 +4837,13 @@ packages:
       for-in: 1.0.2
       is-extendable: 1.0.1
 
+  /mkdirp/0.5.5:
+    resolution: {integrity: sha512-NKmAlESf6jMGym1++R0Ra7wvhV+wFW63FaSOFPwRahvea0gMUcGUhVeAg/0BC0wiv9ih5NYPB1Wn1UEI1/L+xQ==}
+    hasBin: true
+    dependencies:
+      minimist: 1.2.5
+    dev: false
+
   /mkdirp/1.0.4:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
@@ -6175,6 +6198,13 @@ packages:
     dependencies:
       ansi-regex: 2.1.1
 
+  /strip-ansi/4.0.0:
+    resolution: {integrity: sha1-qEeQIusaw2iocTibY1JixQXuNo8=}
+    engines: {node: '>=4'}
+    dependencies:
+      ansi-regex: 3.0.0
+    dev: false
+
   /strip-ansi/5.2.0:
     resolution: {integrity: sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA==}
     engines: {node: '>=6'}
@@ -6783,6 +6813,10 @@ packages:
     resolution: {integrity: sha512-PSNhEJDejZYV7h50BohL09Er9VaIefr2LMAf3OEmpCkjOi34eYyQYAXUTjEQtZJTKcF0E2UKTh+osDLsgNim9Q==}
     engines: {node: '>=8'}
     dev: true
+
+  /xml/1.0.1:
+    resolution: {integrity: sha1-eLpyAgApxbyHuKgaPPzXS0ovweU=}
+    dev: false
 
   /xss/1.0.9:
     resolution: {integrity: sha512-2t7FahYnGJys6DpHLhajusId7R0Pm2yTmuL0GV9+mV0ZlaLSnb2toBmppATfg5sWIhZQGlsTLoecSzya+l4EAQ==}

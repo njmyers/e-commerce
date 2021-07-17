@@ -20,7 +20,11 @@
   "homepage": "https://github.com/njmyers/ecommerce#readme",
   "dependencies": {
     "@njmyers/eslint-config": "^0.0.1",
+    "eslint-junit": "^1.0.1",
     "prettier": "^2.3.2",
     "typescript": "^4.3.5"
+  },
+  "eslint-junit": {
+    "output": "reports/lint.xml"
   }
 }
