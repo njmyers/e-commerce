@@ -4,6 +4,7 @@
     "packages/*/scripts",
     "packages/*/test",
     "packages/*/seeders",
+    "packages/*/migrations",
     "jest.config.ts"
   ],
   "exclude": ["packages/*/node_modules", "node_modules"],
