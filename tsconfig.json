@@ -3,7 +3,8 @@
     "packages/*/src",
     "packages/*/scripts",
     "packages/*/test",
-    "packages/*/seeders"
+    "packages/*/seeders",
+    "jest.config.ts"
   ],
   "exclude": ["packages/*/node_modules", "node_modules"],
   "compilerOptions": {

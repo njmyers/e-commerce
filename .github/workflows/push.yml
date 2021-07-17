@@ -10,39 +10,38 @@ jobs:
     name: Test
     runs-on: [ubuntu-latest]
     steps:
-      - uses: AutoModality/action-clean@v1
+      - name: Clean
+        uses: AutoModality/action-clean@v1
+
       - name: Setup Node v14
         uses: actions/setup-node@v1
         with:
           node-version: '14'
 
-      - name: Cache pnpm modules
+      - name: Get Yarn Cache Path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Yarn
         uses: actions/cache@v2
-        env:
-          cache-name: cache-pnpm-modules
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+            ${{ runner.os }}-yarn-
+        
+      - name: Install Yarn
+        run: npm install -g yarn
 
-      - name: Setup pnpm ${{ env.PNPM_VERSION }}
-        uses: pnpm/action-setup@v2.0.1
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Checkout Repo
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Fetch HEAD + master
-        run: git fetch origin master && git fetch origin $(git branch --show-current)
+      - name: Run Immutable Install
+        run: yarn install --frozen-lockfile
 
-
-      - name: Run immutable install
-        run: pnpm --frozen-lockfile install
-
-      - name: Lint changed workspaces
-        run: pnpm lint -- --format ./node_modules/eslint-junit
+      - name: Lint All Packages
+        run: yarn lint --format ./node_modules/eslint-junit
 
       - name: Publish Lint Report
         if: always()
