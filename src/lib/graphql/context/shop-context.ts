@@ -1,4 +1,5 @@
 import { FastifyRequest } from 'fastify';
+import { Stripe } from 'stripe';
 
 import { ApplicationError, ErrorCode } from '../../error';
 import { RawHeaders, HeaderKey, headers } from '../../headers';
@@ -14,10 +15,11 @@ import {
 import { parseToken } from '../../token';
 import { Role } from '../../../domains/shop/lib';
 import { logger } from '../../logger';
-
+import { getSecret, ServiceProvider } from '../../../services/secrets';
 export interface ShopGraphQLContext {
   shop: Shop;
   user?: Admin | Customer | Merchant | null;
+  stripe: Stripe;
 }
 
 export interface ShopParams {
@@ -55,6 +57,8 @@ export const shopContext = async ({
     });
   }
 
+  const stripe = await createStripe(shop);
+
   logger.debug('Creating shop request context', {
     user,
     shop,
@@ -63,6 +67,7 @@ export const shopContext = async ({
   return {
     user,
     shop,
+    stripe,
   };
 };
 
@@ -81,4 +86,16 @@ async function getMerchant(
   } catch {
     return null;
   }
+}
+
+async function createStripe(shop: Shop): Promise<Stripe> {
+  const stripeToken = await getSecret({
+    shopName: shop.name,
+    serviceProvider: ServiceProvider.Stripe,
+    keyName: 'stripeToken',
+  });
+
+  return new Stripe(stripeToken, {
+    apiVersion: '2020-08-27',
+  });
 }

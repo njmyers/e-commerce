@@ -5,9 +5,10 @@ import {
   IDatabaseDriver,
   Options,
   EntityManager,
+  Connection,
 } from '@mikro-orm/core';
 
-interface Store<D extends IDatabaseDriver = IDatabaseDriver> {
+interface Store<D extends IDatabaseDriver<C>, C extends Connection> {
   em: EntityManager<D>;
   id: string;
 }
@@ -16,8 +17,8 @@ export interface TransactionCallback {
   (em: EntityManager): unknown | Promise<unknown>;
 }
 
-export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
-  storage: AsyncLocalStorage<Store<D>>;
+export class OrmContext<D extends IDatabaseDriver<C>, C extends Connection> {
+  storage: AsyncLocalStorage<Store<D, C>>;
   orm!: Promise<MikroORM<D>>;
 
   constructor(options?: Options<D>) {
@@ -29,7 +30,7 @@ export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
     });
   }
 
-  get store(): Store<D> {
+  get store(): Store<D, C> {
     const store = this.storage.getStore();
 
     if (!store) {
@@ -41,7 +42,7 @@ export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
     return store;
   }
 
-  get em(): Store<D>['em'] {
+  get em(): Store<D, C>['em'] {
     return this.store.em;
   }
 
@@ -56,20 +57,22 @@ export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
    */
   async run<T extends TransactionCallback>(fn: T): Promise<ReturnType<T>> {
     const orm = await this.orm;
-    const em = orm.em.fork(true);
-    const id = uuid();
+    const store = this.storage.getStore() ?? {
+      em: orm.em.fork(true),
+      id: uuid(),
+    };
 
     // @ts-expect-error Fix me please
-    return await this.storage.run({ em, id }, async () => {
-      await em.begin();
+    return await this.storage.run(store, async () => {
+      await store.em.begin();
 
       try {
-        const result = await fn(em);
-        await em.commit();
+        const result = await fn(store.em);
+        await store.em.commit();
 
         return result;
       } catch (error) {
-        await em.rollback();
+        await store.em.rollback();
         throw error;
       }
     });
@@ -82,20 +85,22 @@ export class OrmContext<D extends IDatabaseDriver = IDatabaseDriver> {
    */
   async runAndRevert(fn: TransactionCallback): Promise<void> {
     const orm = await this.orm;
-    const em = orm.em.fork(true);
-    const id = uuid();
+    const store = this.storage.getStore() ?? {
+      em: orm.em.fork(true),
+      id: uuid(),
+    };
 
     // @ts-expect-error Fix me please
-    await this.storage.run({ em, id }, async () => {
-      await em.begin();
+    await this.storage.run(store, async () => {
+      await store.em.begin();
 
       try {
-        const result = await fn(em);
-        await em.rollback();
+        const result = await fn(store.em);
+        await store.em.rollback();
 
         return result;
       } catch (error) {
-        await em.rollback();
+        await store.em.rollback();
         throw error;
       }
     });
