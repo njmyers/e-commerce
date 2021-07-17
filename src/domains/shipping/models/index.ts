@@ -1,3 +1,3 @@
-export * from './Address';
-export * from './Country';
-export * from './ShippingBox';
+export * from './address';
+export * from './country';
+export * from './shipping-box';
