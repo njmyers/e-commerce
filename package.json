@@ -1,0 +1,26 @@
+{
+  "name": "@njmyers/e-commerce-root",
+  "version": "0.0.1",
+  "description": "Cross cutting e-commerce services for store applications",
+  "private": true,
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint packages"
+  },
+  "engines": {
+    "node": ">=14",
+    "pnpm": ">=6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+git@github.com:njmyers/ecommerce.git"
+  },
+  "author": "Nick Myers",
+  "license": "ISC",
+  "homepage": "https://github.com/njmyers/ecommerce#readme",
+  "dependencies": {
+    "@njmyers/eslint-config": "^0.0.1",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
+  }
+}

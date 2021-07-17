@@ -1,0 +1,39 @@
+{
+  "include": [
+    "packages/*/src",
+    "packages/*/scripts",
+    "packages/*/test",
+    "packages/*/seeders"
+  ],
+  "exclude": ["packages/*/node_modules", "node_modules"],
+  "compilerOptions": {
+    // Code Emit Options
+    "target": "ES2019",
+    "lib": ["ES2019"],
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "allowJs": false,
+    "importHelpers": true,
+    "sourceMap": true,
+    "removeComments": true,
+    "pretty": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    // Module Resolution Options
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+
+    // Type-checking Options
+    "strict": true,
+    "skipLibCheck": true,
+
+    // Linting Options
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "suppressImplicitAnyIndexErrors": true
+  }
+}
