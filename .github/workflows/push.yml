@@ -8,7 +8,7 @@ env:
 jobs:
   test:
     name: Test
-    runs-on: [self-hosted, 2xlarge]
+    runs-on: [ubuntu-latest]
     steps:
       - uses: AutoModality/action-clean@v1
       - name: Setup Node v14
