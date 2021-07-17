@@ -22,7 +22,6 @@ export class LineItem extends MutableEntity {
   product: Product;
 
   @ManyToOne({ nullable: false })
-  @Field(() => Order)
   order!: Order;
 
   constructor(input: LineItemFields) {

@@ -2,11 +2,11 @@ import { Populate } from '@mikro-orm/core';
 import { orm } from '../../../lib/context';
 import { ApplicationError, StatusCode, ErrorCode } from '../../../lib/error';
 import { Order, OrderFields, LineItemFields, LineItem } from '../models';
-import { User } from '../../shop/models';
+import { Customer } from '../../shop/models';
 
 export interface OrderInput extends OrderFields {
   lineItems: LineItemFields[];
-  customer: User;
+  customer: Customer;
 }
 
 async function findById(

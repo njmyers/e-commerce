@@ -11,9 +11,13 @@ import {
 import { Field, ObjectType } from 'type-graphql';
 
 import { LineItem } from './line-item';
-import { Customer } from '../../shop/models';
+import { User } from '../../shop/models';
 import { MutableEntity } from '../../../lib/entity';
-
+import {
+  ConnectionFactory,
+  EdgeFactory,
+  PageInfoFactory,
+} from '../../../lib/graphql/connection';
 export interface OrderFields {
   tax: number;
   notes?: string;
@@ -55,8 +59,7 @@ export class Order extends MutableEntity {
   shippedAt?: Date;
 
   @ManyToOne()
-  @Field(() => Customer)
-  customer!: Customer;
+  customer!: User;
 
   @OneToMany(() => LineItem, lineItem => lineItem.order)
   @Field(() => [LineItem])
@@ -70,4 +73,22 @@ export class Order extends MutableEntity {
     this.shippedAt = input.shippedAt;
     this.notes = input.notes;
   }
+}
+
+@ObjectType()
+export class OrderEdge extends EdgeFactory(() => Order) {
+  // Add your own properties
+}
+
+@ObjectType()
+export class OrderPageInfo extends PageInfoFactory() {
+  // Add your own properties
+}
+
+@ObjectType()
+export class OrderConnection extends ConnectionFactory(
+  OrderEdge,
+  OrderPageInfo
+) {
+  // Add your own properties
 }
