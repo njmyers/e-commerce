@@ -16,8 +16,18 @@ jobs:
         with:
           node-version: '14'
 
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
       - name: Setup pnpm ${{ env.PNPM_VERSION }}
-        uses: pnpm/action-setup@v1.2.1
+        uses: pnpm/action-setup@v2.0.1
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -27,13 +37,6 @@ jobs:
       - name: Fetch HEAD + master
         run: git fetch origin master && git fetch origin $(git branch --show-current)
 
-      - name: Cache pnpm modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm
 
       - name: Run immutable install
         run: pnpm --frozen-lockfile install
