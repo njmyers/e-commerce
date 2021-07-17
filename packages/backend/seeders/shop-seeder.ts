@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 import { orm } from '../src/lib/context';
 import { seeder } from '../test/seeder';
 
 const TEST_PASSWORD = 'testpassword';
 const ORDERS_TO_CREATE = 100;
 
-(async () => {
+void (async () => {
   try {
     await orm.run(async em => {
       await seeder({
@@ -14,7 +15,7 @@ const ORDERS_TO_CREATE = 100;
       await em.flush();
     });
     console.log('Finished seeding the DB');
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error seeding DB', { error });
   } finally {
     console.log('Cleaning up');

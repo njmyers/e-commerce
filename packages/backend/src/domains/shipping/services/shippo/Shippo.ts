@@ -16,11 +16,16 @@ export interface Parcel {
 }
 
 export interface Shipment {
-  from: Address;
-  to: Address;
+  from: ShippoAddressInput;
+  to: ShippoAddressInput;
   parcels: Parcel[];
 }
 
+interface ShippoResponse {
+  [key: string]: unknown;
+}
+
+type GotShippoResponse = Got.Response<ShippoResponse>;
 export class Shippo {
   got: Got.Got;
 
@@ -35,8 +40,7 @@ export class Shippo {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  async createShipment(shipment: Shipment) {
+  async createShipment(shipment: Shipment): Promise<GotShippoResponse> {
     const payload = {
       async: false,
       address_from: convertAddressToShippoAddress(shipment.from),
@@ -50,11 +54,17 @@ export class Shippo {
       }),
     };
 
-    return await this.got('shipments', {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+    return await this.got<ShippoResponse>('shipments', {
       method: 'POST',
       json: payload,
     });
   }
+}
+
+interface ShippoAddressInput extends Address {
+  name: string;
+  country: Country;
 }
 
 interface ShippoAddress {
@@ -67,7 +77,9 @@ interface ShippoAddress {
   country: Country;
 }
 
-function convertAddressToShippoAddress(address: Address): ShippoAddress {
+function convertAddressToShippoAddress(
+  address: ShippoAddressInput
+): ShippoAddress {
   return {
     name: address.name,
     street1: address.addressLine1,

@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import path from 'path';
-// @ts-expect-error Not typed yet
-import config from '@inscripted/config';
+import { config } from './config';
 import { Options } from '@mikro-orm/core';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 
@@ -12,12 +9,12 @@ import { Address } from './domains/shipping';
 
 const mikroOrmConfig: Options = {
   metadataProvider: TsMorphMetadataProvider,
-  type: config.get('db.type') as 'sqlite',
-  dbName: config.get('db.name') as string,
-  host: config.get('db.address') as string,
-  port: config.get('db.port') as number,
-  user: config.get('db.username') as string,
-  password: config.get('db.password') as string,
+  type: config.get('db.type') as 'postgresql',
+  dbName: config.get('db.name'),
+  host: config.get('db.address'),
+  port: config.get('db.port'),
+  user: config.get('db.username'),
+  password: config.get('db.password'),
   entities: [
     Shop,
     Product,
