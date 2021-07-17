@@ -1,0 +1,1 @@
+export { shippo } from './instance';

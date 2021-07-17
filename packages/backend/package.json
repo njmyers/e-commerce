@@ -1,0 +1,56 @@
+{
+  "name": "@inscripted/backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "db:up": "docker-compose up -d && run-s migration:up",
+    "db:down": "docker-compose down --rmi local",
+    "develop": "NODE_ENV=development nodemon --exec ts-node src/app.ts ",
+    "test": "jest",
+    "circular": "madge --circular src/app.ts",
+    "seed": "NODE_ENV=development ts-node seeders/shop-seeder.ts",
+    "migration:create": "NODE_ENV=development mikro-orm migration:create",
+    "migration:up": "NODE_ENV=development mikro-orm migration:up",
+    "migration:down": "NODE_ENV=development mikro-orm migration:down"
+  },
+  "author": "",
+  "license": "ISC",
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts"
+    ]
+  },
+  "dependencies": {
+    "@aws-sdk/client-ssm": "^3.19.0",
+    "@mikro-orm/core": "^4.5.6",
+    "@mikro-orm/postgresql": "^4.5.6",
+    "@mikro-orm/reflection": "^4.5.6",
+    "apollo-server-fastify": "^2.25.2",
+    "bcrypt": "^5.0.1",
+    "chalk": "^4.1.1",
+    "class-validator": "^0.13.1",
+    "convict": "^6.1.0",
+    "fastify": "^3.18.0",
+    "graphql": "^15.5.1",
+    "jsonwebtoken": "^8.5.1",
+    "npm-run-all": "^4.1.5",
+    "stripe": "^8.157.0",
+    "type-graphql": "^1.1.1",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@mikro-orm/cli": "^4.5.6",
+    "@types/bcrypt": "^5.0.0",
+    "@types/faker": "^5.5.6",
+    "@types/got": "^9.6.11",
+    "@types/jsonwebtoken": "^8.5.3",
+    "@types/uuid": "^8.3.0",
+    "faker": "^5.5.3",
+    "madge": "^5.0.1",
+    "nodemon": "^2.0.7",
+    "ts-node": "^10.0.0"
+  }
+}
