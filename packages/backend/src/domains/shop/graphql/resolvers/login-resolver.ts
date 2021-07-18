@@ -1,6 +1,6 @@
 import { Resolver, Arg, Mutation } from 'type-graphql';
 
-import { orm } from '../../../../lib/context';
+import { orm } from '../../../../lib/orm';
 
 import { LoginInput } from '../inputs/login-input-type';
 import { Session } from '../types/session-type';

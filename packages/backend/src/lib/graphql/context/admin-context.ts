@@ -1,6 +1,6 @@
 import { FastifyRequest } from 'fastify';
 
-import { orm } from '../../context';
+import { orm } from '../../orm';
 import { Admin, userRepo } from '../../../domains/shop';
 import { HeaderKey, RawHeaders, headers } from '../../headers';
 import { parseToken } from '../../token';

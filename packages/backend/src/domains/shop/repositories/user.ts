@@ -1,5 +1,5 @@
 import { Populate } from '@mikro-orm/core';
-import { orm } from '../../../lib/context';
+import { orm } from '../../../lib/orm';
 import { ClassType } from '../../../lib/graphql';
 import {
   PasswordField,
@@ -13,7 +13,6 @@ import {
 } from '../models';
 import { ApplicationError, StatusCode, ErrorCode } from '../../../lib/error';
 import { Role } from '../lib';
-
 export interface UserByRole {
   [Role.Admin]: unknown;
   [Role.Customer]: unknown;

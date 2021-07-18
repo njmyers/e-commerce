@@ -3,7 +3,7 @@ import { Stripe } from 'stripe';
 
 import { ApplicationError, ErrorCode } from '../../error';
 import { RawHeaders, HeaderKey, headers } from '../../headers';
-import { orm } from '../../context';
+import { orm } from '../../orm';
 import {
   Merchant,
   Customer,

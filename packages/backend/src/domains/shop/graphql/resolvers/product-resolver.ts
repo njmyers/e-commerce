@@ -13,7 +13,7 @@ import { IsInt, IsString } from 'class-validator';
 
 import { productRepo } from '../../repositories';
 import { ProductFields, Product, ProductsConnection } from '../../models';
-import { orm } from '../../../../lib/context';
+import { orm } from '../../../../lib/orm';
 import {
   resolveConnectionFromCollection,
   ShopGraphQLContext,

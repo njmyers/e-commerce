@@ -1,5 +1,5 @@
 import { Populate } from '@mikro-orm/core';
-import { orm } from '../../../lib/context';
+import { orm } from '../../../lib/orm';
 import {
   Shop,
   ShopFields,

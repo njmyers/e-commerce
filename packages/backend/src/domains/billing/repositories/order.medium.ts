@@ -1,5 +1,5 @@
 import { orderRepo } from './order';
-import { orm } from '../../../lib/context';
+import { orm } from '../../../lib/orm';
 
 import { Customer, Product, Shop } from '../../shop/models';
 import { shopRepo } from '../../shop/repositories';

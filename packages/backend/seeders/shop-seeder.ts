@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { orm } from '../src/lib/context';
+import { orm } from '../src/lib/orm';
 import { seeder } from '../test/seeder';
 
 const TEST_PASSWORD = 'testpassword';

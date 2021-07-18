@@ -1,5 +1,5 @@
 import { shopRepo } from './shop';
-import { orm } from '../../../lib/context';
+import { orm } from '../../../lib/orm';
 import { generate } from '../../../../test/data';
 
 describe('shopRepo', () => {
@@ -119,28 +119,6 @@ describe('shopRepo', () => {
         });
       });
     });
-
-    // test('should create product records', async () => {
-    //   await orm.runAndRevert(async () => {
-    //     const { shop, productInput1, productInput2 } = await setupTest();
-
-    //     const products = shop.products.toJSON();
-    //     expect(products).toHaveLength(2);
-    //     expect(products).toContainEqual(
-    //       expect.objectContaining({
-    //         ...productInput1,
-    //         shop: shop.id,
-    //       })
-    //     );
-
-    //     expect(products).toContainEqual(
-    //       expect.objectContaining({
-    //         ...productInput2,
-    //         shop: shop.id,
-    //       })
-    //     );
-    //   });
-    // });
   });
 
   describe('findById', () => {

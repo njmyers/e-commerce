@@ -1,5 +1,5 @@
 import { Order } from './order';
-import { orm } from '../../../lib/context';
+import { orm } from '../../../lib/orm';
 
 import { Product } from '../../shop/models';
 

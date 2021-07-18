@@ -15,7 +15,7 @@ import { IsString } from 'class-validator';
 import { Permission } from '../../lib/permissions';
 import { shopRepo } from '../../repositories';
 import { Shop, ShopFields, Product, Customer, Merchant } from '../../models';
-import { orm } from '../../../../lib/context';
+import { orm } from '../../../../lib/orm';
 import {
   ConnectionInput,
   IConnection,

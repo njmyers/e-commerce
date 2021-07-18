@@ -1,6 +1,6 @@
 import { shopRepo } from './shop';
 import { productRepo } from './product';
-import { orm } from '../../../lib/context';
+import { orm } from '../../../lib/orm';
 import { generate } from '../../../../test/data';
 import { Product, ProductFields } from '../models';
 

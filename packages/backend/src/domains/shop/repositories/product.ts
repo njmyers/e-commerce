@@ -1,5 +1,5 @@
 import { Populate } from '@mikro-orm/core';
-import { orm } from '../../../lib/context';
+import { orm } from '../../../lib/orm';
 import { Product, ProductFields, Shop } from '../models';
 import { ApplicationError, StatusCode, ErrorCode } from '../../../lib/error';
 

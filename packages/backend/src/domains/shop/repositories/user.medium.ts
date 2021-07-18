@@ -1,5 +1,5 @@
 import { userRepo } from './user';
-import { orm } from '../../../lib/context';
+import { orm } from '../../../lib/orm';
 import { generate } from '../../../../test/data';
 import { password } from '../lib/password';
 import { Role } from '../lib';

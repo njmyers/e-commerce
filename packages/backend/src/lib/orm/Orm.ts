@@ -17,7 +17,7 @@ export interface TransactionCallback {
   (em: EntityManager): unknown | Promise<unknown>;
 }
 
-export class OrmContext<D extends IDatabaseDriver<C>, C extends Connection> {
+export class Orm<D extends IDatabaseDriver<C>, C extends Connection> {
   storage: AsyncLocalStorage<Store<D, C>>;
   orm!: Promise<MikroORM<D>>;
 
@@ -57,7 +57,7 @@ export class OrmContext<D extends IDatabaseDriver<C>, C extends Connection> {
    */
   async run<T extends TransactionCallback>(fn: T): Promise<ReturnType<T>> {
     const orm = await this.orm;
-    const store = this.storage.getStore() ?? {
+    const store = {
       em: orm.em.fork(true),
       id: uuid(),
     };
@@ -85,7 +85,7 @@ export class OrmContext<D extends IDatabaseDriver<C>, C extends Connection> {
    */
   async runAndRevert(fn: TransactionCallback): Promise<void> {
     const orm = await this.orm;
-    const store = this.storage.getStore() ?? {
+    const store = {
       em: orm.em.fork(true),
       id: uuid(),
     };
