@@ -1,18 +1,18 @@
 {
   "name": "@njmyers/e-commerce-backend",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Backend for e-commerce applications",
   "main": "index.js",
   "scripts": {
     "db:up": "docker-compose up -d && run-s migration:up",
     "db:down": "docker-compose down --rmi local",
     "develop": "NODE_ENV=development nodemon --exec ts-node src/app.ts ",
-    "test": "jest",
     "circular": "madge --circular src/app.ts",
     "seed": "NODE_ENV=development ts-node seeders/shop-seeder.ts",
     "migration:create": "NODE_ENV=development mikro-orm migration:create",
     "migration:up": "NODE_ENV=development mikro-orm migration:up",
-    "migration:down": "NODE_ENV=development mikro-orm migration:down"
+    "migration:down": "NODE_ENV=development mikro-orm migration:down",
+    "cache:generate": "NODE_ENV=development mikro-orm cache:generate"
   },
   "author": "Nick Myers",
   "license": "ISC",
@@ -27,10 +27,10 @@
   },
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.19.0",
-    "@mikro-orm/core": "^4.5.7",
-    "@mikro-orm/migrations": "^4.5.7",
-    "@mikro-orm/postgresql": "^4.5.7",
-    "@mikro-orm/reflection": "^4.5.7",
+    "@mikro-orm/core": "4.5.7",
+    "@mikro-orm/migrations": "4.5.7",
+    "@mikro-orm/postgresql": "4.5.7",
+    "@mikro-orm/reflection": "4.5.7",
     "apollo-server-fastify": "^2.25.2",
     "bcrypt": "^5.0.1",
     "chalk": "^4.1.1",
