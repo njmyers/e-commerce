@@ -7,18 +7,18 @@ import {
   LoginResolver,
   CustomerResolver,
   ProductResolver,
-} from './domains/shop/graphql';
+  OrderResolver,
+} from './graphql/resolvers';
 
-import { OrderResolver } from './domains/billing/graphql';
 import { config } from './config';
 
-import { checkPermissions, Permission, Role } from './domains/shop/lib';
+import { checkPermissions, Permission, Role } from './lib';
 import {
   adminContext,
   shopContext,
   AdminGraphQLContext,
   ShopGraphQLContext,
-} from './lib/graphql';
+} from './graphql/context';
 import { ApplicationError, ErrorCode, StatusCode } from './lib/error';
 import { logger } from './lib/logger';
 

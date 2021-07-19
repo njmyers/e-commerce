@@ -3,9 +3,16 @@ import { config } from './config';
 import { Options } from '@mikro-orm/core';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 
-import { Shop, Product, User, Admin, Merchant, Customer } from './domains/shop';
-import { LineItem, Order } from './domains/billing';
-import { Address } from './domains/shipping';
+import { Shop } from './models/shop';
+import { Product } from './models/product';
+import { User } from './models/user';
+import { Admin } from './models/admin';
+import { Merchant } from './models/merchant';
+import { Customer } from './models/customer';
+
+import { LineItem } from './models/line-item';
+import { Order } from './models/order';
+import { Address } from './models/address';
 
 const mikroOrmConfig: Options = {
   metadataProvider: TsMorphMetadataProvider,
