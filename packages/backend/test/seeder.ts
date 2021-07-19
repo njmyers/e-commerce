@@ -1,8 +1,15 @@
 import { generate } from '../test/data';
 
-import { Admin, Shop, shopRepo, userRepo } from '../src/domains/shop';
-import { Order, orderRepo } from '../src/domains/billing';
-import { Role } from '../src/domains/shop/lib';
+import { Shop } from '../src/models/shop';
+import { Admin } from '../src/models/admin';
+
+import { shopRepo } from '../src/repositories/shop';
+import { userRepo } from '../src/repositories/user';
+
+import { Order } from '../src/models/order';
+import { orderRepo } from '../src/repositories/order';
+
+import { Role } from '../src/lib/permissions';
 
 export interface SeederArgs {
   password: string;

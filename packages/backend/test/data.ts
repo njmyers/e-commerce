@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { PasswordField, UserFields } from '../src/domains/shop';
+import { PasswordField, UserFields } from '../src/models';
 import fakerLocaleEnUs from 'faker/locale/en_US';
 
 fakerLocaleEnUs.seed(0o7734);
