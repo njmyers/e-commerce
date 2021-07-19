@@ -1,0 +1,38 @@
+---
+version: '3.6'
+services:
+  postgres:
+    image: postgres:13.3
+    command:
+      - '-c'
+      - 'fsync=off'
+      - '-c'
+      - 'full_page_writes=off'
+      - '-c'
+      - 'synchronous_commit=off'
+      - '-c'
+      - 'checkpoint_timeout=3600'
+      - '-c'
+      - 'max_wal_size=16000'
+      - '-c'
+      - 'listen_addresses=*'
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=e-commerce
+      - POSTGRES_USER=development
+  migrations:
+    image: node:14-alpine3.14
+    volumes:
+      - '.:/app'
+    working_dir: '/app'
+    entrypoint: >
+      sh -c "
+        yarn && 
+        yarn backend run migration:up
+      "
+    ports:
+      - '5000:5000'
+    environment:
+      - DATABASE_ADDRESS=postgres

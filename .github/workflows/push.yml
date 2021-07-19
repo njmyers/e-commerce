@@ -40,3 +40,5 @@ jobs:
       - name: Lint All Packages
         run: yarn lint --format ./node_modules/eslint-junit
 
+      - name: Test
+        run: docker-compose up -d && yarn test
