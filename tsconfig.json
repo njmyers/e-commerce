@@ -23,6 +23,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
+    "jsx": "react",
+
     // Module Resolution Options
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",

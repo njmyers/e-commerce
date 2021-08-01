@@ -1,16 +1,18 @@
 {
+  "root": true,
   "extends": [
     "@njmyers/eslint-config",
+    "@njmyers/eslint-config/react",
     "@njmyers/eslint-config/typescript",
     "@njmyers/eslint-config/jest"
   ],
   "parserOptions": {
-    "project": ["./tsconfig.json"]
+    "project": ["./tsconfig.json", "./packages/*/tsconfig.json"]
   },
   "settings": {
     "import/resolver": {
       "typescript": {
-        "project": ["./tsconfig.json"]
+        "project": ["./tsconfig.json", "./packages/*/tsconfig.json"]
       }
     }
   },
