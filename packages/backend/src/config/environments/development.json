@@ -4,5 +4,8 @@
     "name": "e-commerce",
     "address": "localhost",
     "username": "development"
+  },
+  "providers": {
+    "scoped": false
   }
 }

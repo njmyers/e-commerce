@@ -63,6 +63,22 @@ export const config = convict({
       env: 'APOLLO_DEBUG',
     },
   },
+  providers: {
+    scoped: {
+      format: Boolean,
+      description: 'Whether to enable scoped providers via the secrets manager',
+      default: false,
+      env: 'PROVIDERS_SCOPED',
+    },
+    stripe: {
+      token: {
+        format: String,
+        description: 'The stripe token to use when not using scoped providers',
+        default: '',
+        env: 'PROVIDERS_STRIPE_TOKEN',
+      },
+    },
+  },
 });
 
 const env = config.get('env');
