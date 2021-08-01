@@ -15,6 +15,7 @@ interface Info {
   method: string;
   level: Level;
   message: string;
+  error?: Error;
 }
 
 const colors = {
@@ -31,7 +32,7 @@ const colors = {
  *
  * @param info - The winston log object
  */
-function print({ level, method, message, ...info }: Info) {
+function print({ level, method, message, error, ...info }: Info) {
   const colorize = colors[level];
   const isVerbose = [Level.debug, Level.verbose].includes(level);
 
@@ -52,7 +53,18 @@ function print({ level, method, message, ...info }: Info) {
       ? ` ${chalk.bold(info.class)}`
       : '';
 
-  return `${colorize(`[${level}]`)}${location} => ${message}${data}`;
+  const firstLine = `${colorize(`[${level}]`)}${location} => ${message}`;
+  const secondLine = error
+    ? `\n${error.message}\n${String(error.stack)}\n`
+    : data
+    ? `\n${data}\n`
+    : '';
+
+  if (secondLine) {
+    return `${firstLine}\n${secondLine}`;
+  }
+
+  return firstLine;
 }
 
 /** A winston compatible logger */
