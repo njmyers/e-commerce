@@ -12,7 +12,7 @@ import { Customer } from '../../models/customer';
 import { shopRepo } from '../../repositories/shop';
 import { userRepo } from '../../repositories/user';
 
-import { getSecret, ServiceProvider } from '../../services/secrets';
+import { createStripe } from '../../services/stripe';
 
 import { parseToken } from '../../lib/token';
 import { Role } from '../../lib/permissions';
@@ -88,16 +88,4 @@ async function getMerchant(
   } catch {
     return null;
   }
-}
-
-async function createStripe(shop: Shop): Promise<Stripe> {
-  const stripeToken = await getSecret({
-    shopName: shop.name,
-    serviceProvider: ServiceProvider.Stripe,
-    keyName: 'stripeToken',
-  });
-
-  return new Stripe(stripeToken, {
-    apiVersion: '2020-08-27',
-  });
 }
