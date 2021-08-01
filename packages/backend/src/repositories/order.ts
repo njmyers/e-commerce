@@ -8,7 +8,7 @@ import { ApplicationError, StatusCode, ErrorCode } from '../lib/error';
 
 export interface OrderInput extends OrderFields {
   lineItems: LineItemFields[];
-  customer: Customer;
+  customer?: Customer;
 }
 
 async function findById(
@@ -25,7 +25,18 @@ async function findByNumber(
   return await orm.em.findOne(Order, { number }, populate);
 }
 
-function create(input: OrderInput): Order {
+interface CreateOptions {
+  persist?: boolean;
+}
+
+const defaultCreateOptions = {
+  persist: true,
+};
+
+function create(
+  input: OrderInput,
+  options: CreateOptions = defaultCreateOptions
+): Order {
   const { lineItems, customer, ...fields } = input;
   const order = new Order(fields);
 
@@ -39,7 +50,9 @@ function create(input: OrderInput): Order {
     order.customer = customer;
   }
 
-  orm.em.persist(order);
+  if (options.persist) {
+    orm.em.persist(order);
+  }
 
   return order;
 }
