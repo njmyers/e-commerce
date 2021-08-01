@@ -26,13 +26,32 @@ services:
     image: node:14-alpine3.14
     volumes:
       - '.:/app'
+      - /node_modules
+      - /packages/frontend/node_modules
+      - /packages/backend/node_modules
     working_dir: '/app'
     entrypoint: >
       sh -c "
         yarn && 
         yarn backend run migration:up
       "
-    ports:
-      - '5000:5000'
     environment:
       - DATABASE_ADDRESS=postgres
+  backend:
+    image: node:14-alpine3.14
+    volumes:
+      - '.:/app'
+      - /node_modules
+      - /packages/frontend/node_modules
+      - /packages/backend/node_modules
+    working_dir: '/app'
+    entrypoint: >
+      sh -c "
+        yarn && 
+        yarn backend run develop
+      "
+    ports:
+      - '5050:5050'
+    environment:
+      - DATABASE_ADDRESS=postgres
+      - APP_HOST=0.0.0.0
