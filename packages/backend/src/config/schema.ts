@@ -8,6 +8,18 @@ export const config = convict({
     default: 'production',
     env: 'NODE_ENV',
   },
+  app: {
+    port: {
+      format: Number,
+      env: 'APP_PORT',
+      default: 5050,
+    },
+    host: {
+      format: String,
+      env: 'APP_HOST',
+      default: 'localhost',
+    },
+  },
   db: {
     type: {
       doc: 'The database engine in use',
