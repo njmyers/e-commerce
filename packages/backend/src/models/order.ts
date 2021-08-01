@@ -8,7 +8,7 @@ import {
   Collection,
   Unique,
 } from '@mikro-orm/core';
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ObjectType, Int } from 'type-graphql';
 
 import { LineItem } from './line-item';
 import { User } from './user';
@@ -19,7 +19,7 @@ import {
   PageInfoFactory,
 } from '../graphql/connection';
 export interface OrderFields {
-  tax: number;
+  tax?: number;
   notes?: string;
   shippedAt?: Date;
 }
@@ -33,7 +33,7 @@ export class Order extends MutableEntity {
   number: string;
 
   @Property()
-  @Field()
+  @Field(() => Int)
   get total(): number {
     if (!this.lineItems) {
       return 0;
@@ -47,8 +47,8 @@ export class Order extends MutableEntity {
   }
 
   @Property()
-  @Field()
-  tax: number;
+  @Field(() => Int)
+  tax?: number;
 
   @Property()
   @Field()

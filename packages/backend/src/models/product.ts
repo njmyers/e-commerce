@@ -1,5 +1,5 @@
 import { Entity, Property, ManyToOne } from '@mikro-orm/core';
-import { ObjectType, Field } from 'type-graphql';
+import { ObjectType, Field, Int } from 'type-graphql';
 
 import { MutableEntity } from './mutable-entity';
 import { Shop } from './shop';
@@ -32,23 +32,23 @@ export class Product extends MutableEntity {
   description: string;
 
   @Property()
-  @Field()
+  @Field(() => Int)
   price: number;
 
   @Property()
-  @Field()
+  @Field(() => Int)
   length: number;
 
   @Property()
-  @Field()
+  @Field(() => Int)
   height: number;
 
   @Property()
-  @Field()
+  @Field(() => Int)
   width: number;
 
   @Property()
-  @Field()
+  @Field(() => Int)
   mass: number;
 
   @ManyToOne()
