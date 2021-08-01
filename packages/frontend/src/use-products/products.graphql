@@ -1,0 +1,22 @@
+query FetchProducts($first: Int, $after: ID) {
+  products(first: $first, after: $after) {
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    edges {
+      cursor
+      node {
+        id
+        name
+        description
+        price
+        length
+        height
+        width
+        mass
+      }
+    }
+  }
+}

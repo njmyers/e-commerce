@@ -6,7 +6,8 @@
   "license": "ISC",
   "scripts": {
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "generate-types": "ts-node scripts/generate-types.ts"
   },
   "engines": {
     "node": ">=14"
@@ -18,13 +19,19 @@
     "@storybook/addon-links": "^6.3.6",
     "@storybook/react": "^6.3.6",
     "babel-loader": "^8.2.2",
-    "react": "^17.0.2"
+    "graphql-tag": "^2.12.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "dependencies": {
     "@apollo/client": "^3.4.1",
+    "@graphql-codegen/cli": "^1.21.8",
+    "@graphql-codegen/typescript": "^1.23.0",
+    "@graphql-codegen/typescript-operations": "^1.18.4",
     "graphql": "^15.5.1"
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   }
 }
