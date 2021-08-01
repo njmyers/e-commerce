@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { fastify } from 'fastify';
 import { ApolloServer } from 'apollo-server-fastify';
 import { buildSchema, AuthChecker } from 'type-graphql';
@@ -8,6 +9,7 @@ import {
   CustomerResolver,
   ProductResolver,
   OrderResolver,
+  CheckoutSessionResolver,
 } from './graphql/resolvers';
 
 import { config } from './config';
@@ -19,6 +21,7 @@ import {
   AdminGraphQLContext,
   ShopGraphQLContext,
 } from './graphql/context';
+import { registerEnums } from './graphql/register-enums';
 import { ApplicationError, ErrorCode, StatusCode } from './lib/error';
 import { logger } from './lib/logger';
 
@@ -61,9 +64,11 @@ const shopAuthChecker: AuthChecker<ShopGraphQLContext> = async (
   });
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function createApp() {
   const app = fastify();
+
+  // Must register before building schemas
+  registerEnums();
   const adminSchema = await buildSchema({
     authChecker: adminAuthChecker,
     resolvers: [ShopResolver, LoginResolver, CustomerResolver, OrderResolver],
@@ -85,7 +90,13 @@ export async function createApp() {
   );
 
   const shopSchema = await buildSchema({
-    resolvers: [ProductResolver, LoginResolver],
+    resolvers: [
+      ProductResolver,
+      LoginResolver,
+      CustomerResolver,
+      CheckoutSessionResolver,
+      OrderResolver,
+    ],
     authChecker: shopAuthChecker,
   });
 
@@ -115,7 +126,11 @@ if (require.main === module) {
   void (async () => {
     try {
       const app = await createApp();
-      const url = await app.listen(5050);
+      const url = await app.listen(
+        config.get('app.port'),
+        config.get('app.host')
+      );
+
       logger.http(`Server is running on ${url}`);
     } catch (error: unknown) {
       logger.error('Server could not start', { error });
