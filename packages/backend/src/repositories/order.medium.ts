@@ -19,9 +19,13 @@ describe('orderRepo', () => {
         const { product, customer } = await setupTest();
         const orderInput = generate.order();
         const lineItemInput = generate.lineItem();
+        const shippingAddress = generate.address();
+        const billingAddress = generate.address();
         const order = orderRepo.create({
           ...orderInput,
           customer,
+          billingAddress,
+          shippingAddress,
           lineItems: [
             {
               ...lineItemInput,
@@ -33,6 +37,8 @@ describe('orderRepo', () => {
         await em.flush();
 
         expect(order).toMatchObject(orderInput);
+        expect(order.shippingAddress).toMatchObject(shippingAddress);
+        expect(order.billingAddress).toMatchObject(billingAddress);
         expect(order.lineItems.toJSON()).toContainEqual(
           expect.objectContaining({
             ...lineItemInput,
@@ -50,9 +56,13 @@ describe('orderRepo', () => {
         const { product, customer } = await setupTest();
         const orderInput = generate.order();
         const lineItemInput = generate.lineItem();
+        const shippingAddress = generate.address();
+        const billingAddress = generate.address();
         const order = orderRepo.create({
           ...orderInput,
           customer,
+          billingAddress,
+          shippingAddress,
           lineItems: [
             {
               ...lineItemInput,
@@ -76,9 +86,13 @@ describe('orderRepo', () => {
 
         const orderInput = generate.order();
         const lineItemInput = generate.lineItem();
+        const shippingAddress = generate.address();
+        const billingAddress = generate.address();
         const order = orderRepo.create({
           ...orderInput,
           customer,
+          billingAddress,
+          shippingAddress,
           lineItems: [
             {
               ...lineItemInput,
@@ -101,11 +115,15 @@ describe('orderRepo', () => {
         const { product, customer } = await setupTest();
         const orderInput = generate.order();
         const lineItemInput = generate.lineItem();
+        const shippingAddress = generate.address();
+        const billingAddress = generate.address();
         const orderUpdates = generate.order();
 
         const order = orderRepo.create({
           ...orderInput,
           customer,
+          shippingAddress,
+          billingAddress,
           lineItems: [
             {
               ...lineItemInput,

@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { PasswordField, UserFields } from '../src/models';
+import {
+  PasswordField,
+  UserFields,
+  AddressFields,
+  OrderFields,
+  ProductFields,
+  Country,
+} from '../src/models';
 import fakerLocaleEnUs from 'faker/locale/en_US';
 
 fakerLocaleEnUs.seed(0o7734);
@@ -21,7 +28,7 @@ function user(user?: Partial<UserFields & PasswordField>) {
   };
 }
 
-function order() {
+function order(): OrderFields {
   return {
     tax: faker.datatype.number({ min: 0, max: 10000 }),
     notes: faker.random.words(),
@@ -35,7 +42,7 @@ function lineItem() {
   };
 }
 
-function product() {
+function product(): ProductFields {
   return {
     name: faker.random.word(),
     description: faker.random.words(),
@@ -47,10 +54,23 @@ function product() {
   };
 }
 
+function address(): AddressFields {
+  const province = faker.address.stateAbbr();
+
+  return {
+    addressLine1: faker.address.streetAddress(),
+    city: faker.address.city(),
+    province,
+    postalCode: faker.address.zipCodeByState(province),
+    country: Country.US,
+  };
+}
+
 export const generate = {
   shop,
   user,
   order,
   lineItem,
   product,
+  address,
 };
