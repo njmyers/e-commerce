@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withStoreProvider } from '../../.storybook/with-store-provider';
+import { withStoreProvider } from '../../../.storybook/with-store-provider';
 
 import { useProducts } from './use-products';
 

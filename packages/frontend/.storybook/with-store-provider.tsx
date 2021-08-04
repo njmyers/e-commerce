@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StoreProvider } from '../src/store-provider';
+import { StoreProvider } from '../src/contexts/store-provider';
 
 import { API_URL, STORE_NAME } from '../test/constants';
 

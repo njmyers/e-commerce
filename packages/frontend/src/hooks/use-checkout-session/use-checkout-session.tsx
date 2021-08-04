@@ -2,10 +2,10 @@ import * as React from 'react';
 import { useMutation } from '@apollo/client';
 import checkoutMutation from './create-checkout-session.graphql';
 
-import * as Schema from '../merchant-types';
+import * as Schema from '../../merchant-types';
 
-import { browserOnly } from '../utils/browserOnly';
-import { noop } from '../utils/noop';
+import { browserOnly } from '../../utils/browserOnly';
+import { noop } from '../../utils/noop';
 
 type Mutation = Schema.CreateCheckoutSessionMutation;
 type Variables = Schema.CreateCheckoutSessionMutationVariables;
