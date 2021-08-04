@@ -2,6 +2,7 @@
 import { fastify } from 'fastify';
 import { ApolloServer } from 'apollo-server-fastify';
 import { buildSchema, AuthChecker } from 'type-graphql';
+import { config } from './config';
 
 import {
   ShopResolver,
@@ -12,8 +13,7 @@ import {
   CheckoutSessionResolver,
 } from './graphql/resolvers';
 
-import { config } from './config';
-
+import { stripe } from './webhooks/stripe';
 import { checkPermissions, Permission, Role } from './lib';
 import {
   adminContext,
@@ -83,7 +83,7 @@ export async function createApp() {
     debug,
   });
 
-  void app.register(
+  await app.register(
     adminServer.createHandler({
       path: '/admin',
     })
@@ -105,12 +105,14 @@ export async function createApp() {
     context: shopContext,
   });
 
-  void app.register(
+  await app.register(
     shopServer.createHandler({
       path: `/:shop`,
       disableHealthCheck: true,
     })
   );
+
+  await app.register(stripe);
 
   app.all('/*', {}, () => {
     throw new ApplicationError('No route found', {
