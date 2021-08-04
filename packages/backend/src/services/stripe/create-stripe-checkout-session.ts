@@ -11,6 +11,15 @@ export interface CreateStripeCheckoutSessionArgs {
   checkoutUrl: string;
 }
 
+export interface MetadataLineItem {
+  quantity: number;
+  productId: number;
+}
+
+export interface Metadata {
+  lineItems: string;
+}
+
 export async function createStripeCheckoutSession({
   stripe,
   order,
@@ -28,9 +37,21 @@ export async function createStripeCheckoutSession({
         product_data: {
           description: lineItem.product.description,
           name: lineItem.product.name,
+          metadata: {
+            productId: lineItem.product.id,
+          },
           // TODO: Add tax_code to checkout
         },
       },
+    });
+  }
+
+  const metadataLineItems: MetadataLineItem[] = [];
+
+  for (const lineItem of order.lineItems) {
+    metadataLineItems.push({
+      quantity: lineItem.quantity,
+      productId: lineItem.product.id,
     });
   }
 
@@ -41,6 +62,9 @@ export async function createStripeCheckoutSession({
     success_url: `${checkoutUrl}?success`,
     cancel_url: `${checkoutUrl}?cancel`,
     billing_address_collection: 'required',
+    metadata: {
+      lineItems: JSON.stringify(metadataLineItems),
+    },
     automatic_tax: {
       enabled: true,
     },

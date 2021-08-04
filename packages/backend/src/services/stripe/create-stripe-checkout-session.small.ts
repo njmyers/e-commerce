@@ -34,6 +34,9 @@ describe('createCheckoutSession', () => {
               product_data: {
                 description: lineItem.product.description,
                 name: lineItem.product.name,
+                metadata: {
+                  productId: lineItem.product.id,
+                },
               },
             },
           },
@@ -42,6 +45,14 @@ describe('createCheckoutSession', () => {
         success_url: `${checkoutUrl}?success`,
         cancel_url: `${checkoutUrl}?cancel`,
         billing_address_collection: 'required',
+        metadata: {
+          lineItems: JSON.stringify([
+            {
+              quantity: lineItem.quantity,
+              productId: lineItem.product.id,
+            },
+          ]),
+        },
         automatic_tax: {
           enabled: true,
         },
