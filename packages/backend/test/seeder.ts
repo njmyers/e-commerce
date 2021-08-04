@@ -58,6 +58,8 @@ export async function seeder({
     const order = orderRepo.create({
       tax: 10,
       customer: shop.customers[0],
+      shippingAddress: generate.address(),
+      billingAddress: generate.address(),
       lineItems: [
         {
           ...generate.lineItem(),
