@@ -22,6 +22,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_DB=e-commerce
       - POSTGRES_USER=development
+
   migrations:
     image: node:14-alpine3.14
     volumes:
@@ -37,6 +38,7 @@ services:
       "
     environment:
       - DATABASE_ADDRESS=postgres
+
   backend:
     image: node:14-alpine3.14
     volumes:
@@ -55,3 +57,14 @@ services:
     environment:
       - DATABASE_ADDRESS=postgres
       - APP_HOST=0.0.0.0
+      - PROVIDERS_STRIPE_TOKEN=${PROVIDERS_STRIPE_TOKEN}
+
+  stripe:
+    image: stripe/stripe-cli
+    container_name: e-commerce-stripe
+    command:
+      - listen
+      - --forward-to=http://backend:5050/webhooks/stripe
+      - --skip-verify
+    environment:
+      - STRIPE_API_KEY=${PROVIDERS_STRIPE_TOKEN}
