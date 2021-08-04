@@ -1,5 +1,5 @@
 import { Entity, Property, ManyToOne } from '@mikro-orm/core';
-import { Field, ObjectType } from 'type-graphql';
+import { Field, ObjectType, Int } from 'type-graphql';
 
 import { Product } from './product';
 import { Order } from './order';
@@ -14,7 +14,7 @@ export interface LineItemFields {
 @ObjectType()
 export class LineItem extends MutableEntity {
   @Property()
-  @Field()
+  @Field(() => Int)
   quantity: number;
 
   @ManyToOne({ nullable: false })
