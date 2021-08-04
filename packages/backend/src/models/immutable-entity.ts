@@ -1,4 +1,4 @@
-import { PrimaryKey, Property, DateType, BeforeUpdate } from '@mikro-orm/core';
+import { PrimaryKey, Property, BeforeUpdate } from '@mikro-orm/core';
 import { ObjectType, Field, ID } from 'type-graphql';
 
 import { ApplicationError, ErrorCode, StatusCode } from '../lib/error';
@@ -9,7 +9,7 @@ export class ImmutableEntity {
   @Field(() => ID)
   id!: number;
 
-  @Property({ type: DateType, nullable: false })
+  @Property({ nullable: false })
   createdAt = new Date();
 
   @BeforeUpdate()
