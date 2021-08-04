@@ -5,7 +5,6 @@ import { ImmutableEntity } from './immutable-entity';
 import { Country } from './country';
 
 export interface AddressFields {
-  name: string;
   addressLine1: string;
   addressLine2?: string;
   city: string;

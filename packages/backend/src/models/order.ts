@@ -12,6 +12,7 @@ import { Field, ObjectType, Int } from 'type-graphql';
 
 import { LineItem } from './line-item';
 import { User } from './user';
+import { Address } from './address';
 import { MutableEntity } from './mutable-entity';
 import {
   ConnectionFactory,
@@ -60,6 +61,12 @@ export class Order extends MutableEntity {
 
   @ManyToOne()
   customer!: User;
+
+  @ManyToOne()
+  shippingAddress?: Address;
+
+  @ManyToOne()
+  billingAddress?: Address;
 
   @OneToMany(() => LineItem, lineItem => lineItem.order)
   @Field(() => [LineItem])
