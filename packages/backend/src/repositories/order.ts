@@ -1,7 +1,9 @@
 import { Populate } from '@mikro-orm/core';
+
 import { Customer } from '../models/customer';
 import { Order, OrderFields } from '../models/order';
 import { LineItemFields, LineItem } from '../models/line-item';
+import { Address, AddressFields } from '../models/address';
 
 import { orm } from '../lib/orm';
 import { ApplicationError, StatusCode, ErrorCode } from '../lib/error';
@@ -9,6 +11,8 @@ import { ApplicationError, StatusCode, ErrorCode } from '../lib/error';
 export interface OrderInput extends OrderFields {
   lineItems: LineItemFields[];
   customer?: Customer;
+  shippingAddress?: AddressFields;
+  billingAddress?: AddressFields;
 }
 
 async function findById(
@@ -34,16 +38,29 @@ const defaultCreateOptions = {
 };
 
 function create(
-  input: OrderInput,
+  {
+    lineItems,
+    customer,
+    shippingAddress,
+    billingAddress,
+    ...input
+  }: OrderInput,
   options: CreateOptions = defaultCreateOptions
 ): Order {
-  const { lineItems, customer, ...fields } = input;
-  const order = new Order(fields);
+  const order = new Order(input);
 
   if (Array.isArray(lineItems)) {
     lineItems.forEach(lineItem => {
       order.lineItems.add(new LineItem(lineItem));
     });
+  }
+
+  if (shippingAddress) {
+    order.shippingAddress = new Address(shippingAddress);
+  }
+
+  if (billingAddress) {
+    order.billingAddress = new Address(billingAddress);
   }
 
   if (customer) {
@@ -70,12 +87,20 @@ async function update(id: number, input: Partial<OrderInput>): Promise<Order> {
     });
   }
 
-  const { lineItems, ...fields } = input;
+  const { lineItems, billingAddress, shippingAddress, ...fields } = input;
 
   if (Array.isArray(lineItems)) {
     lineItems.forEach(lineItem => {
       order.lineItems.add(new LineItem(lineItem));
     });
+  }
+
+  if (shippingAddress) {
+    order.shippingAddress = new Address(shippingAddress);
+  }
+
+  if (billingAddress) {
+    order.billingAddress = new Address(billingAddress);
   }
 
   Object.entries(fields).forEach(([field, value]) => {
