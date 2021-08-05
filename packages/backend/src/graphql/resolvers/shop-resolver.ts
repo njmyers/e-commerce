@@ -5,60 +5,130 @@ import {
   Args,
   Arg,
   Mutation,
-  InputType,
-  Field,
   FieldResolver,
   Authorized,
+  Ctx,
+  Int,
 } from 'type-graphql';
-import { IsString } from 'class-validator';
 
-import { Permission } from '../../lib/permissions';
 import { shopRepo } from '../../repositories';
-import { Shop, ShopFields, Product, Customer, Merchant } from '../../models';
+import { ShopCreateInput, ShopUpdateInput } from '../inputs';
+import { Shop, Product, Customer, Merchant, User } from '../../models';
 import { orm } from '../../lib/orm';
+import { Permission, checkPermissions } from '../../lib/permissions';
+import { AdminGraphQLContext } from '../context/admin-context';
+import { EntityID } from '../../models/id';
+
 import {
   ConnectionInput,
   IConnection,
   resolveConnectionFromCollection,
 } from '../connection';
-
-@InputType({ description: 'Create a new shop' })
-export class ShopMutationInput implements ShopFields {
-  @Field()
-  @IsString()
-  public name!: string;
-
-  @Field()
-  @IsString()
-  description!: string;
-}
+import { ApplicationError, ErrorCode, StatusCode } from '../../lib/error';
 
 @Resolver(() => Shop)
 export class ShopResolver {
   @Authorized(Permission.ReadShop)
   @Query(() => Shop)
-  async shop(@Arg('id') id: number): Promise<Shop | null> {
+  async shop(
+    @Arg('id', () => Int) id: EntityID,
+    @Ctx() ctx: AdminGraphQLContext
+  ): Promise<Shop> {
     return await orm.run(async () => {
-      return await shopRepo.findById(id);
+      const shop = await shopRepo.findById(id, ['merchants']);
+
+      if (!shop) {
+        throw new ApplicationError('Cannot find shop', {
+          status: StatusCode.BadRequest,
+          code: ErrorCode.ERROR_MALFORMED_REQUEST,
+        });
+      }
+
+      if (
+        checkPermissions({
+          permission: Permission.ReadShop,
+          role: ctx.user?.role,
+          shop: {
+            requester: ctx.user,
+            owners: shop.merchants.toArray() as User[],
+          },
+        })
+      ) {
+        return shop;
+      }
+
+      throw new ApplicationError('Cannot find shop', {
+        status: StatusCode.BadRequest,
+        code: ErrorCode.ERROR_MALFORMED_REQUEST,
+      });
     });
   }
 
-  @Authorized(Permission.ReadAllShops)
+  @Authorized(Permission.ReadShop)
   @Query(() => [Shop])
-  async shops(): Promise<Shop[]> {
+  async shops(@Ctx() ctx: AdminGraphQLContext): Promise<Shop[]> {
     return await orm.run(async () => {
-      return await shopRepo.findAll();
+      const shops = await shopRepo.findAll(['merchants']);
+
+      return shops.filter(shop => {
+        return checkPermissions({
+          permission: Permission.ReadShop,
+          role: ctx.user?.role,
+          shop: {
+            requester: ctx.user,
+            owners: shop.merchants.toArray() as User[],
+          },
+        });
+      });
     });
   }
 
   @Authorized(Permission.CreateShop)
   @Mutation(() => Shop)
-  async addShop(@Arg('input') input: ShopMutationInput): Promise<Shop> {
+  async createShop(@Arg('input') input: ShopCreateInput): Promise<Shop> {
     return await orm.run(async () => {
       return await shopRepo.create(input);
     });
   }
 
+  @Authorized(Permission.UpdateShop)
+  @Mutation(() => Shop)
+  async updateShop(
+    @Arg('id', () => Int) id: EntityID,
+    @Arg('input') input: ShopUpdateInput,
+    @Ctx() ctx: AdminGraphQLContext
+  ): Promise<Shop> {
+    return await orm.run(async () => {
+      const shop = await shopRepo.findById(id, ['merchants']);
+
+      if (!shop) {
+        throw new ApplicationError('Cannot find shop to update', {
+          status: StatusCode.BadRequest,
+          code: ErrorCode.ERROR_MALFORMED_REQUEST,
+        });
+      }
+
+      if (
+        !checkPermissions({
+          permission: Permission.ReadShop,
+          role: ctx.user?.role,
+          shop: {
+            requester: ctx.user,
+            owners: shop.merchants.toArray() as User[],
+          },
+        })
+      ) {
+        throw new ApplicationError('Cannot find shop to update', {
+          status: StatusCode.BadRequest,
+          code: ErrorCode.ERROR_MALFORMED_REQUEST,
+        });
+      }
+
+      return await shopRepo.update(id, input);
+    });
+  }
+
+  @Authorized(Permission.ReadProduct)
   @FieldResolver()
   async products(
     @Args() input: ConnectionInput,
@@ -67,6 +137,7 @@ export class ShopResolver {
     return await resolveConnectionFromCollection(input, shop.products);
   }
 
+  @Authorized(Permission.ReadCustomer)
   @FieldResolver()
   async customers(
     @Args() input: ConnectionInput,
@@ -75,6 +146,7 @@ export class ShopResolver {
     return await resolveConnectionFromCollection(input, shop.customers);
   }
 
+  @Authorized(Permission.ReadAdmin)
   @FieldResolver()
   async merchants(
     @Args() input: ConnectionInput,

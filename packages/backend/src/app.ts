@@ -43,23 +43,14 @@ const adminAuthChecker: AuthChecker<AdminGraphQLContext> = (
   });
 };
 
-const shopAuthChecker: AuthChecker<ShopGraphQLContext> = async (
+const shopAuthChecker: AuthChecker<ShopGraphQLContext> = (
   { context },
   permissions
-): Promise<boolean> => {
-  const { user, shop } = context;
-  const [owner] = await shop.merchants.matching({
-    where: { id: user?.id },
-  });
-
+): boolean => {
   return (permissions as Permission[]).every(permission => {
     return checkPermissions({
-      role: user?.role ?? Role.Customer,
+      role: context.user?.role ?? Role.Customer,
       permission,
-      user: {
-        owner,
-        requester: user,
-      },
     });
   });
 };
@@ -71,7 +62,13 @@ export async function createApp() {
   registerEnums();
   const adminSchema = await buildSchema({
     authChecker: adminAuthChecker,
-    resolvers: [ShopResolver, LoginResolver, CustomerResolver, OrderResolver],
+    resolvers: [
+      ShopResolver,
+      ProductResolver,
+      LoginResolver,
+      CustomerResolver,
+      OrderResolver,
+    ],
   });
 
   const { debug } = config.get('apollo');

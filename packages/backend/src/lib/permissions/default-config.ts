@@ -37,10 +37,6 @@ export const defaultConfig: RulesByRole = {
     },
 
     {
-      permission: Permission.ReadAllShops,
-      scope: Scope.Application,
-    },
-    {
       permission: Permission.CreateShop,
       scope: Scope.Application,
     },
@@ -127,12 +123,21 @@ export const defaultConfig: RulesByRole = {
     },
 
     {
+      permission: Permission.ReadShop,
+      scope: Scope.Shop,
+    },
+    {
+      permission: Permission.UpdateShop,
+      scope: Scope.Shop,
+    },
+
+    {
       permission: Permission.CreateProduct,
       scope: Scope.Shop,
     },
     {
       permission: Permission.ReadProduct,
-      scope: Scope.Application,
+      scope: Scope.Shop,
     },
     {
       permission: Permission.UpdateProduct,
