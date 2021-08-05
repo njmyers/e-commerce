@@ -1,4 +1,4 @@
-import { Shop, User } from '../../models';
+import { User } from '../../models';
 import { checkPermissions } from './check-permissions';
 import { Permission, Scope, Role } from './permission';
 
@@ -63,7 +63,7 @@ describe('checkPermissions', () => {
         permission: Permission.CreateProduct,
         user: {
           requester: { id: 1 } as User,
-          owner: { id: 2 } as User,
+          owners: [{ id: 2 }] as User[],
         },
       },
       false,
@@ -75,7 +75,7 @@ describe('checkPermissions', () => {
         permission: Permission.CreateProduct,
         user: {
           requester: { id: 1 } as User,
-          owner: { id: 1 } as User,
+          owners: [{ id: 1 }] as User[],
         },
       },
       true,
@@ -86,8 +86,8 @@ describe('checkPermissions', () => {
         role: Role.Merchant,
         permission: Permission.CreateProduct,
         shop: {
-          requester: { id: 1 } as Shop,
-          owner: { id: 2 } as Shop,
+          requester: { id: 1 } as User,
+          owners: [{ id: 2 }] as User[],
         },
       },
       false,
@@ -98,8 +98,8 @@ describe('checkPermissions', () => {
         role: Role.Merchant,
         permission: Permission.CreateProduct,
         shop: {
-          requester: { id: 1 } as Shop,
-          owner: { id: 1 } as Shop,
+          requester: { id: 1 } as User,
+          owners: [{ id: 1 }] as User[],
         },
       },
       true,
