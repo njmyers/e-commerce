@@ -4,7 +4,7 @@ import { withStoreProvider } from '../../../.storybook/with-store-provider';
 import { useProducts } from './use-products';
 
 export default {
-  title: 'src/useProducts',
+  title: 'merchant/useProducts',
   decorators: [withStoreProvider],
 };
 

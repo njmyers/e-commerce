@@ -5,13 +5,22 @@ import shell from 'shelljs';
 
 import { API_URL, STORE_NAME } from '../test/constants';
 
-const apiUrl = `${API_URL}/${STORE_NAME}`;
-const typesFile = path.resolve(__dirname, '../src/merchant-types.ts');
+const merchantApiUrl = `${API_URL}/${STORE_NAME}`;
 const saveToFile = true;
+
+const merchantTypesFile = path.resolve(__dirname, '../src/types.ts');
+
+const config = {
+  avoidOptionals: {
+    field: true,
+    object: true,
+    inputValue: false,
+  },
+};
 
 async function generateGraphQLTypes() {
   const merchantSchema = {
-    [apiUrl]: {
+    [merchantApiUrl]: {
       method: 'POST',
     },
   };
@@ -19,24 +28,18 @@ async function generateGraphQLTypes() {
   await generate(
     {
       generates: {
-        [typesFile]: {
+        [merchantTypesFile]: {
           schema: merchantSchema,
           documents: 'src/**/*.graphql',
           plugins: ['typescript', 'typescript-operations'],
-          config: {
-            avoidOptionals: {
-              field: true,
-              object: true,
-              inputValue: false,
-            },
-          },
+          config,
         },
       },
     },
     saveToFile
   );
 
-  shell.exec(`yarn prettier ${typesFile} --write`);
+  shell.exec(`yarn prettier ${merchantTypesFile} --write`);
 }
 
 void (async function () {

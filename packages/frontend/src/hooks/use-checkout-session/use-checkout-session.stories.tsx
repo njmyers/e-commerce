@@ -5,7 +5,7 @@ import { useProducts } from '../use-products';
 import { useCheckoutSession } from './use-checkout-session';
 
 export default {
-  title: 'src/useCheckoutSession',
+  title: 'merchant/useCheckoutSession',
   decorators: [withStoreProvider],
 };
 

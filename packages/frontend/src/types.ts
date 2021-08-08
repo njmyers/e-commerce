@@ -21,17 +21,6 @@ export type CheckoutSessionInput = {
   checkoutUrl: Scalars['String'];
 };
 
-/** Create a new shop */
-export type CreateProductInput = {
-  name: Scalars['String'];
-  description: Scalars['String'];
-  price: Scalars['Float'];
-  length: Scalars['Float'];
-  width: Scalars['Float'];
-  height: Scalars['Float'];
-  mass: Scalars['Float'];
-};
-
 export type LineItemInput = {
   quantity: Scalars['Float'];
   product: ProductInput;
@@ -46,16 +35,11 @@ export type LoginInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: Session;
-  createProduct: Product;
   createCheckoutSession: StripeCheckoutSession;
 };
 
 export type MutationLoginArgs = {
   input: LoginInput;
-};
-
-export type MutationCreateProductArgs = {
-  input: CreateProductInput;
 };
 
 export type MutationCreateCheckoutSessionArgs = {

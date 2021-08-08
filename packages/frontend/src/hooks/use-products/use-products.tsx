@@ -1,7 +1,7 @@
 import { QueryHookOptions, useQuery } from '@apollo/client';
 import query from './products.graphql';
 
-import * as Schema from '../../merchant-types';
+import * as Schema from '../../types';
 
 type Query = Schema.FetchProductsQuery;
 type Variables = Schema.FetchProductsQueryVariables;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMutation } from '@apollo/client';
 import checkoutMutation from './create-checkout-session.graphql';
 
-import * as Schema from '../../merchant-types';
+import * as Schema from '../../types';
 
 import { browserOnly } from '../../utils/browserOnly';
 import { noop } from '../../utils/noop';
@@ -29,7 +29,6 @@ export function useCheckoutSession() {
       }
 
       const url = mutation.data.createCheckoutSession.url;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       window.location.replace(url);
     }, noop);
   }, [mutation]);

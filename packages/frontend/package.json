@@ -2,36 +2,38 @@
   "name": "@njmyers/e-commerce-frontend",
   "version": "0.0.1",
   "description": "Frontend package for e-commerce applications",
-  "author": "Nick Myers",
   "license": "ISC",
+  "author": "Nick Myers",
   "scripts": {
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "generate-types": "ts-node scripts/generate-types.ts"
   },
-  "engines": {
-    "node": ">=14"
+  "dependencies": {
+    "@apollo/client": "^3.4.1",
+    "cross-fetch": "^3.1.4",
+    "graphql": "^15.5.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",
+    "@graphql-codegen/cli": "^1.21.8",
+    "@graphql-codegen/typescript": "^1.23.0",
+    "@graphql-codegen/typescript-operations": "^1.18.4",
     "@storybook/addon-actions": "^6.3.6",
     "@storybook/addon-essentials": "^6.3.6",
     "@storybook/addon-links": "^6.3.6",
     "@storybook/react": "^6.3.6",
-    "babel-loader": "^8.2.2",
-    "graphql-tag": "^2.12.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "dependencies": {
-    "@apollo/client": "^3.4.1",
-    "@graphql-codegen/cli": "^1.21.8",
-    "@graphql-codegen/typescript": "^1.23.0",
-    "@graphql-codegen/typescript-operations": "^1.18.4",
-    "graphql": "^15.5.1"
+    "@types/react": "^17.0.16",
+    "@types/react-dom": "^17.0.9",
+    "babel-loader": "^8.2.2"
   },
   "peerDependencies": {
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "engines": {
+    "node": ">=14"
   }
 }
