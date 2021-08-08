@@ -12,7 +12,8 @@
     "test": "jest",
     "lint": "eslint packages",
     "backend": "yarn workspace @njmyers/e-commerce-backend",
-    "frontend": "yarn workspace @njmyers/e-commerce-frontend"
+    "frontend": "yarn workspace @njmyers/e-commerce-frontend",
+    "admin": "yarn workspace @njmyers/e-commerce-admin"
   },
   "engines": {
     "node": ">=14"
