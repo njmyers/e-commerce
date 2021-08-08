@@ -16,5 +16,5 @@
       }
     }
   },
-  "ignorePatterns": ["**/migrations/*"]
+  "ignorePatterns": ["**/migrations/*", "**/build/*", "**/temp/*"]
 }

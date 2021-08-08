@@ -5,7 +5,10 @@
     "packages/*/test",
     "packages/*/seeders",
     "packages/*/migrations",
-    "jest.config.ts"
+    "packages/*/plugins",
+    "packages/*/.storybook",
+    "jest.config.ts",
+    "packages/*/generator.config.ts"
   ],
   "exclude": ["packages/*/node_modules", "node_modules"],
   "compilerOptions": {

@@ -26,7 +26,7 @@ export const Default = () => {
           <div key={edge.node.id}>
             <h3>{edge.node.name}</h3>
             <h5>{edge.node.description}</h5>
-            <img src="https://i.imgur.com/EHyR2nP.png" />
+            <img alt="product" src="https://i.imgur.com/EHyR2nP.png" />
             <h5>Price ${edge.node.price / 100}</h5>
             <h5>
               {edge.node.length}mm x {edge.node.width}mm x {edge.node.height}mm
