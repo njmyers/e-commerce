@@ -44,4 +44,4 @@ jobs:
         run: yarn lint --format ./node_modules/eslint-junit
 
       - name: Test
-        run: docker-compose up -d postgres migrations && yarn test
+        run: docker-compose up -d postgres && yarn backend migrations:up && yarn test
