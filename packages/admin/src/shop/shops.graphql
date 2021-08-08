@@ -1,0 +1,7 @@
+query FetchShops {
+  shops {
+    id
+    name
+    description
+  }
+}

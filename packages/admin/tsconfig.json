@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES5",
+    "lib": ["ES5", "ES6", "DOM", "DOM.Iterable"],
+    "declaration": true,
+    "outDir": "build",
+    "baseUrl": "."
+  }
+}

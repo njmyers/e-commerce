@@ -1,0 +1,13 @@
+export const ADMIN = '/admin';
+export const SHOPS = `${ADMIN}/shops`;
+export const SHOP = `${ADMIN}/shop`;
+export const SHOP_MATCH = `${ADMIN}/shop/:shopId`;
+export const PRODUCT = `${SHOP_MATCH}/product`;
+export const PRODUCT_CREATE = `${SHOP_MATCH}/product/create`;
+export const PRODUCTS = `${SHOP_MATCH}/products`;
+export const CUSTOMER = `${SHOP_MATCH}/customer`;
+export const CUSTOMERS = `${SHOP_MATCH}/customers`;
+export const ORDER = `${SHOP_MATCH}/order`;
+export const ORDERS = `${SHOP_MATCH}/orders`;
+export const SETTINGS = `${ADMIN}/settings`;
+export const LOGOUT = `${ADMIN}/logout`;

@@ -1,0 +1,3 @@
+{
+  "extends": "@njmyers/generator-plugin-typescript/babel.config.js"
+}

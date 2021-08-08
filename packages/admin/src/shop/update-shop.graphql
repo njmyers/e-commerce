@@ -1,0 +1,7 @@
+mutation UpdateShop($id: Int!, $input: UpdateShopInput!) {
+  updateShop(id: $id, input: $input) {
+    id
+    name
+    description
+  }
+}

@@ -1,0 +1,10 @@
+.paginated-buttons {
+  width: 100%;
+  max-width: 250px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.paginated-buttons > button {
+  width: calc(50% - 4px);
+}

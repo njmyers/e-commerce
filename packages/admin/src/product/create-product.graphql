@@ -1,0 +1,12 @@
+mutation CreateProduct($shopId: Int!, $input: CreateProductInput!) {
+  createShopProduct(shopId: $shopId, input: $input) {
+    id
+    name
+    description
+    length
+    width
+    height
+    price
+    mass
+  }
+}
