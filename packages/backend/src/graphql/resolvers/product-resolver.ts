@@ -3,58 +3,29 @@ import {
   Query,
   Arg,
   Args,
-  InputType,
-  Field,
+  Int,
   Ctx,
   Authorized,
   Mutation,
 } from 'type-graphql';
-import { IsInt, IsString } from 'class-validator';
 
-import { productRepo } from '../../repositories';
-import { ProductFields, Product, ProductsConnection } from '../../models';
+import { productRepo, shopRepo } from '../../repositories';
+import { Product, ProductsConnection } from '../../models';
+import { CreateProductInput, UpdateProductInput } from '../inputs';
+
 import { orm } from '../../lib/orm';
 import {
   resolveConnectionFromCollection,
   ConnectionInput,
   IConnection,
 } from '../connection';
-import { ShopGraphQLContext } from '../context';
+import { ShopGraphQLContext, AdminGraphQLContext } from '../context';
 import { Permission } from '../../lib/permissions';
-
-@InputType({ description: 'Create a new shop' })
-export class CreateProductInput implements ProductFields {
-  @Field()
-  @IsString()
-  public name!: string;
-
-  @Field()
-  @IsString()
-  public description!: string;
-
-  @Field()
-  @IsInt()
-  public price!: number;
-
-  @Field()
-  @IsInt()
-  public length!: number;
-
-  @Field()
-  @IsInt()
-  public width!: number;
-
-  @Field()
-  @IsInt()
-  public height!: number;
-
-  @Field()
-  @IsInt()
-  public mass!: number;
-}
+import { EntityID } from '../../models/id';
+import { ApplicationError, ErrorCode, StatusCode } from '../../lib/error';
 
 @Resolver(() => Product)
-export class ProductResolver {
+export class ShopProductResolver {
   @Authorized(Permission.ReadProduct)
   @Query(() => Product)
   async product(@Arg('id') id: number): Promise<Product | null> {
@@ -73,15 +44,73 @@ export class ProductResolver {
       return await resolveConnectionFromCollection(input, ctx.shop.products);
     });
   }
+}
+
+export class AdminProductResolver {
+  @Authorized(Permission.CreateProduct)
+  @Mutation(() => Product)
+  async createShopProduct(
+    @Arg('shopId', () => Int) shopId: EntityID,
+    @Arg('input') input: CreateProductInput,
+    @Ctx() ctx: AdminGraphQLContext
+  ): Promise<Product | null> {
+    return await orm.run(async em => {
+      if (!ctx.user) {
+        throw new ApplicationError('Cannot update product', {
+          code: ErrorCode.ERROR_UNAUTHORIZED,
+          status: StatusCode.Unauthorized,
+        });
+      }
+
+      const shop = await shopRepo.findOwnedShopById({
+        id: shopId,
+        user: ctx.user,
+        permission: Permission.CreateProduct,
+      });
+
+      if (!shop) {
+        throw new ApplicationError('Cannot update product', {
+          code: ErrorCode.ERROR_UNAUTHORIZED,
+          status: StatusCode.Unauthorized,
+        });
+      }
+
+      const product = productRepo.create({ ...input, shop });
+      await em.flush();
+      return product;
+    });
+  }
 
   @Authorized(Permission.CreateProduct)
   @Mutation(() => Product)
-  async createProduct(
-    @Arg('input') input: CreateProductInput,
-    @Ctx() ctx: ShopGraphQLContext
+  async updateShopProduct(
+    @Arg('shopId', () => Int) shopId: EntityID,
+    @Arg('productId', () => Int) productId: EntityID,
+    @Arg('input') input: UpdateProductInput,
+    @Ctx() ctx: AdminGraphQLContext
   ): Promise<Product | null> {
     return await orm.run(async em => {
-      const product = productRepo.create({ ...input, shop: ctx.shop });
+      if (!ctx.user) {
+        throw new ApplicationError('Cannot update product', {
+          code: ErrorCode.ERROR_UNAUTHORIZED,
+          status: StatusCode.Unauthorized,
+        });
+      }
+
+      const shop = await shopRepo.findOwnedShopById({
+        id: shopId,
+        user: ctx.user,
+        permission: Permission.CreateProduct,
+      });
+
+      if (!shop) {
+        throw new ApplicationError('Cannot update product', {
+          code: ErrorCode.ERROR_UNAUTHORIZED,
+          status: StatusCode.Unauthorized,
+        });
+      }
+
+      const product = productRepo.update(productId, { ...input, shop });
       await em.flush();
       return product;
     });

@@ -8,7 +8,8 @@ import {
   ShopResolver,
   LoginResolver,
   CustomerResolver,
-  ProductResolver,
+  ShopProductResolver,
+  AdminProductResolver,
   OrderResolver,
   CheckoutSessionResolver,
 } from './graphql/resolvers';
@@ -64,7 +65,7 @@ export async function createApp() {
     authChecker: adminAuthChecker,
     resolvers: [
       ShopResolver,
-      ProductResolver,
+      AdminProductResolver,
       LoginResolver,
       CustomerResolver,
       OrderResolver,
@@ -88,7 +89,7 @@ export async function createApp() {
 
   const shopSchema = await buildSchema({
     resolvers: [
-      ProductResolver,
+      ShopProductResolver,
       LoginResolver,
       CustomerResolver,
       CheckoutSessionResolver,

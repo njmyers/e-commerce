@@ -18,7 +18,7 @@ export interface SeederArgs {
 
 export interface SeederReturn {
   admin: Admin;
-  shop: Shop;
+  shops: Shop[];
   orders: Order[];
 }
 
@@ -27,7 +27,10 @@ export async function seeder({
   ordersToCreate,
 }: SeederArgs): Promise<SeederReturn> {
   const admin = await userRepo.create(Role.Admin, generate.user({ password }));
-  const shop = await shopRepo.create({
+  const merchant1 = generate.user({ password });
+  const merchant2 = generate.user({ password });
+
+  const shop1 = await shopRepo.create({
     ...generate.shop(),
     products: [
       generate.product(),
@@ -37,13 +40,22 @@ export async function seeder({
       generate.product(),
       generate.product(),
       generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
     ],
-    merchants: [
-      generate.user({ password }),
-      generate.user({ password }),
-      generate.user({ password }),
-      generate.user({ password }),
-    ],
+    merchants: [merchant1],
     customers: [
       generate.user({ password }),
       generate.user({ password }),
@@ -52,32 +64,69 @@ export async function seeder({
     ],
   });
 
+  const shop2 = await shopRepo.create({
+    ...generate.shop(),
+    products: [
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+      generate.product(),
+    ],
+    merchants: [merchant2],
+    customers: [
+      generate.user({ password }),
+      generate.user({ password }),
+      generate.user({ password }),
+      generate.user({ password }),
+    ],
+  });
+
+  const shops = [shop1, shop2];
   const orders: Order[] = [];
 
-  for (let i = 0; i < ordersToCreate; i += 1) {
-    const order = orderRepo.create({
-      tax: 10,
-      customer: shop.customers[0],
-      shippingAddress: generate.address(),
-      billingAddress: generate.address(),
-      lineItems: [
-        {
-          ...generate.lineItem(),
-          product: shop.products[0],
-        },
-        {
-          ...generate.lineItem(),
-          product: shop.products[1],
-        },
-      ],
-    });
+  for (const shop of shops) {
+    for (let i = 0; i < ordersToCreate; i += 1) {
+      const order = orderRepo.create({
+        tax: 10,
+        customer: shop.customers[0],
+        shippingAddress: generate.address(),
+        billingAddress: generate.address(),
+        lineItems: [
+          {
+            ...generate.lineItem(),
+            product: shop.products[0],
+          },
+          {
+            ...generate.lineItem(),
+            product: shop.products[1],
+          },
+        ],
+      });
 
-    orders.push(order);
+      orders.push(order);
+    }
   }
 
   return {
     admin,
-    shop,
+    shops,
     orders,
   };
 }

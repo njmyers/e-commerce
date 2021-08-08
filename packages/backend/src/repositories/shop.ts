@@ -10,10 +10,12 @@ import {
   Merchant,
   MerchantFields,
   PasswordField,
+  User,
 } from '../models';
 import { ApplicationError, StatusCode, ErrorCode } from '../lib/error';
 import { userRepo } from './user';
-import { Role } from '../lib';
+import { Role, Permission, checkPermissions } from '../lib/permissions';
+import { EntityID } from '../models/id';
 
 type ProductInput = Product | ProductFields;
 type CustomerInput = Customer | (CustomerFields & PasswordField);
@@ -33,6 +35,39 @@ async function findById(
   populate?: Populate<Shop>
 ): Promise<Shop | null> {
   return await orm.em.findOne(Shop, { id }, populate);
+}
+
+export interface FindOwnedShopByIdArgs {
+  id: EntityID;
+  user: User;
+  permission: Permission;
+}
+
+async function findOwnedShopById({
+  id,
+  user,
+  permission,
+}: FindOwnedShopByIdArgs): Promise<Shop | null> {
+  const shop = await findById(id, ['merchants']);
+
+  if (!shop) {
+    return null;
+  }
+
+  if (
+    !checkPermissions({
+      permission,
+      role: user.role,
+      shop: {
+        requester: user,
+        owners: shop.merchants.toArray() as User[],
+      },
+    })
+  ) {
+    return null;
+  }
+
+  return shop;
 }
 
 async function findByName(
@@ -145,6 +180,7 @@ export const shopRepo = {
   findByName,
   findAll,
   findProductById,
+  findOwnedShopById,
   findProductByName,
   create,
   update,

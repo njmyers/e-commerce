@@ -12,7 +12,7 @@ import {
 } from 'type-graphql';
 
 import { shopRepo } from '../../repositories';
-import { ShopCreateInput, ShopUpdateInput } from '../inputs';
+import { CreateShopInput, UpdateShopInput } from '../inputs';
 import { Shop, Product, Customer, Merchant, User } from '../../models';
 import { orm } from '../../lib/orm';
 import { Permission, checkPermissions } from '../../lib/permissions';
@@ -85,7 +85,7 @@ export class ShopResolver {
 
   @Authorized(Permission.CreateShop)
   @Mutation(() => Shop)
-  async createShop(@Arg('input') input: ShopCreateInput): Promise<Shop> {
+  async createShop(@Arg('input') input: CreateShopInput): Promise<Shop> {
     return await orm.run(async () => {
       return await shopRepo.create(input);
     });
@@ -95,7 +95,7 @@ export class ShopResolver {
   @Mutation(() => Shop)
   async updateShop(
     @Arg('id', () => Int) id: EntityID,
-    @Arg('input') input: ShopUpdateInput,
+    @Arg('input') input: UpdateShopInput,
     @Ctx() ctx: AdminGraphQLContext
   ): Promise<Shop> {
     return await orm.run(async () => {
