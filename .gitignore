@@ -6,3 +6,5 @@ temp/
 reports/*
 !reports/.gitkeep
 .envrc
+
+build
